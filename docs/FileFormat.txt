@@ -1,0 +1,15 @@
+WorkPlan to store Data.
+
+
+{
+url: "",
+docId:"",
+timestamp:"",
+hashmap:
+content:
+metadata:
+type:
+status:
+metadata if it is file
+location for images if available or documents by tracking IP address
+}
