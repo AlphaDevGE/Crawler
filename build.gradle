@@ -30,6 +30,9 @@ dependencies {
     
     //crawler4j
     compile('edu.uci.ics:crawler4j:4.2')
+    
+    //JSoup
+    compile('org.jsoup:jsoup:1.7.2')
 }
 
 test {

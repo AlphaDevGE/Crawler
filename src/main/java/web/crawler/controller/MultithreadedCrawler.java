@@ -1,5 +1,6 @@
 package web.crawler.controller;
 
+import java.util.Date;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -10,43 +11,44 @@ import edu.uci.ics.crawler4j.url.WebURL;
 
 public class MultithreadedCrawler extends WebCrawler {
 
-    private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg"
-                                                           + "|png|mp3|mp3|zip|gz))$");
 
-    /**
-     * This method receives two parameters. The first parameter is the page
-     * in which we have discovered this new url and the second parameter is
-     * the new url. You should implement this function to specify whether
-     * the given url should be crawled or not (based on your crawling logic).
-     * In this example, we are instructing the crawler to ignore urls that
-     * have css, js, git, ... extensions and to only accept urls that start
-     * with "http://www.ics.uci.edu/". In this case, we didn't need the
-     * referringPage parameter to make the decision.
-     */
-     @Override
-     public boolean shouldVisit(Page referringPage, WebURL url) {
-         String href = url.getURL().toLowerCase();
-         return !FILTERS.matcher(href).matches()
-                && href.startsWith("http://www.ics.uci.edu/");
-     }
-
-     /**
-      * This function is called when a page is fetched and ready
-      * to be processed by your program.
-      */
      @Override
      public void visit(Page page) {
          String url = page.getWebURL().getURL();
-         System.out.println("URL: " + url);
+         String hashmap;
+         String parentUrl=page.getWebURL().getParentUrl();
+         int  parentdocId=page.getWebURL().getParentDocid();
+         Date TimeStamp=new Date();
+         //String metadata;
+         //String type
+         //String status;
+        //String geoLocation;
+        int docId=page.getWebURL().getDocid();
+         
+         
+       
 
          if (page.getParseData() instanceof HtmlParseData) {
-             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-             String text = htmlParseData.getText();
-             String html = htmlParseData.getHtml();
+             
+        	 
+        	 
+        	 
+        	 
+        	 
+        	 
+        	 
+        	 
+        	 HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
+//             String text = htmlParseData.getText();
+             String content= htmlParseData.getHtml();
              Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
-             System.out.println("Text length: " + text.length());
-             System.out.println("Html length: " + html.length());
+             System.out.println("URL: " + url);
+             System.out.println(" Parent URL: " + parentUrl);
+             System.out.println("Parent docId " + parentdocId);
+             System.out.println("Timestamp: " + TimeStamp);
+             System.out.println("docId: " + docId);
+             System.out.println("content :"+content);
              System.out.println("Number of outgoing links: " + links.size());
          }
     }
