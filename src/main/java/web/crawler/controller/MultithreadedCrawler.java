@@ -15,28 +15,22 @@ public class MultithreadedCrawler extends WebCrawler {
      @Override
      public void visit(Page page) {
          String url = page.getWebURL().getURL();
-         String hashmap;
+         String hash;
          String parentUrl=page.getWebURL().getParentUrl();
          int  parentdocId=page.getWebURL().getParentDocid();
          Date TimeStamp=new Date();
-         //String metadata;
-         //String type
-         //String status;
-        //String geoLocation;
+//         String metadata;
+//         String type
+//         String status;
+//        String geoLocation;
         int docId=page.getWebURL().getDocid();
          
-         
+
        
 
          if (page.getParseData() instanceof HtmlParseData) {
              
-        	 
-        	 
-        	 
-        	 
-        	 
-        	 
-        	 
+    	    	 
         	 
         	 HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 //             String text = htmlParseData.getText();
