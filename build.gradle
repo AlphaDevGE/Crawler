@@ -33,6 +33,14 @@ dependencies {
     
     //JSoup
     compile('org.jsoup:jsoup:1.7.2')
+    
+    //JSOn-simple
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
+    
+    //GSON
+    compile 'com.google.code.gson:gson:2.5'
+    
+    
 }
 
 test {
