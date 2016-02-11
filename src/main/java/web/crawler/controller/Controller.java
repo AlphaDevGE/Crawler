@@ -8,8 +8,11 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class Controller {
+<<<<<<< HEAD
 	
 		static boolean shouldExtract=false;
+=======
+>>>>>>> origin/master
 	public static void main(String[] args) throws Exception {
 		
 			String crawlStorageFolder = "D:/webcrawler";
@@ -61,11 +64,15 @@ public class Controller {
 		 */
 
 		controller.addSeed(args[0]);
+<<<<<<< HEAD
 		if(args.length>2){
 		if(args[2]!=null&&args[2].length()>0&&args[2].trim().equals("-e")){
 			shouldExtract=true;
 			}
 		}
+=======
+
+>>>>>>> origin/master
 		/*
 		 * Start the crawl. This is a blocking operation, meaning that your code
 		 * will reach the line after this only when crawling is finished.
@@ -74,7 +81,10 @@ public class Controller {
 		
 		System.out.println("Finish crawling! Congratulation!");
 	}
+<<<<<<< HEAD
 
 	
+=======
+>>>>>>> origin/master
 }
 
