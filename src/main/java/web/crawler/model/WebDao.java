@@ -1,15 +1,17 @@
-package web.crawler.controller;
+package web.crawler.model;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import web.crawler.model.Web;
-import web.crawler.model.WebRepository;
+/*
+ * if you get "Injection of autowired dependencies failed;" error make sure your 
+ * Dao class is in the same package where MongoRepository interface exists
+ */
 
 @SpringBootApplication
-public class Spider implements CommandLineRunner {
+public class WebDao implements CommandLineRunner {
 
 	@Autowired
 	private WebRepository repository;
@@ -26,13 +28,13 @@ public class Spider implements CommandLineRunner {
 						"Dummy header ..."));
 		
 		
-		System.out.println("Spider: retriving Web data from DB:");
+		System.out.println("WebDao: retriving Web data from DB: findByUrl('www.dummy.com')");
 		System.out.println(repository.findByUrl("www.dummy.com"));
 		
 	}
 	
 	public static void main(String[] args) {
-		SpringApplication.run(Spider.class, args);
+		SpringApplication.run(WebDao.class, args);
 
 	}
 

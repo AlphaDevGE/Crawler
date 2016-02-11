@@ -33,54 +33,6 @@ public class Web {
 		this.header = header;
 		this.visitedTime = visitedTime;
 	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public String getHash() {
-		return hash;
-	}
-
-	public void setHash(String hash) {
-		this.hash = hash;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public String getHeader() {
-		return header;
-	}
-
-	public void setHeader(String header) {
-		this.header = header;
-	}
-
-	public String getVisitedTime() {
-		return visitedTime;
-	}
-
-	public void setVisitedTime(String visitedTime) {
-		this.visitedTime = visitedTime;
-	}
 	
 	public String toString() {
 		String str = String.format("to String()"
