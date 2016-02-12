@@ -12,34 +12,32 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Dao class is in the same package where MongoRepository interface exists
  */
 
+//check other @notation
 @SpringBootApplication
-public class WebDao implements CommandLineRunner {
+public class UrlDao implements CommandLineRunner {
 
 	@Autowired
-	private WebRepository repository;
+	private UrlRepository repository;
 	
 	
 	@Override
 	public void run(String... args) throws Exception {
 		System.out.println("args: " + args);
 		
-		Web web1 =  new Web(
+		Url url1 =  new Url(
 				"www.dummy.com", 
-				"HASH_Dummy_123456", 
-				"Dummy content ...",
-				"Dummy header ...",
-				new Date()); 
+				"HASH_Dummy_123456" ); 
 		
-		repository.save(web1);
+		repository.save(url1);
 		
 		
-		System.out.println("WebDao: retriving Web data from DB: findByUrl('www.dummy.com')");
+		System.out.println("UrlDao: retriving Url data from DB: findByUrl('www.dummy.com')");
 		System.out.println(repository.findByUrl("www.dummy.com"));
 		
 	}
 	
 	public static void main(String[] args) {
-//		SpringApplication.run(WebDao.class, args);
+		SpringApplication.run(UrlDao.class, args);
 
 	}
 
