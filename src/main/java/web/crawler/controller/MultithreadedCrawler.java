@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,6 +52,8 @@ import java.util.regex.Pattern;
 
 
 
+
+
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.BinaryParseData;
@@ -60,15 +64,7 @@ import edu.uci.ics.crawler4j.url.WebURL;
 
 
 public class MultithreadedCrawler extends WebCrawler{
-	
-		  
-
-	
-
-
-
-
-	
+	Set crawledLinks=new HashSet();
 	public String emailSha(String url) {
 		try {
 			MessageDigest md=MessageDigest.getInstance("SHA-256");
@@ -86,11 +82,26 @@ public class MultithreadedCrawler extends WebCrawler{
 		}
 	
 	@Override
+	public boolean shouldVisit(Page page,WebURL url){
+		 Iterator<String> it = crawledLinks.iterator();
+	     while(it.hasNext()){
+	       if(it.next().equals(emailSha(url.getURL()))){
+	    	   return false;
+	       }
+	     }
+	     
+		
+		return true;
+		
+	}
+	
+	@Override
      public void visit(Page page) {
 		
 	    String  URL= page.getWebURL().getURL();
     	String hashValue =emailSha(URL);
-    	System.out.println("Hashed Value is: "+hashValue);
+    	Set crawledLinks=new HashSet();
+    	crawledLinks.add(hashValue);
     	String path=page.getWebURL().getPath();
     	int docId=page.getWebURL().getDocid();
     	int statusCode=page.getStatusCode();
@@ -115,41 +126,6 @@ public class MultithreadedCrawler extends WebCrawler{
     		String title=htmlParseData.getTitle();
     		Map<String,String> metaTags=htmlParseData.getMetaTags();
     		Set<WebURL> outgoingURLS=htmlParseData.getOutgoingUrls();
-    		
-    		//Tika extracting metadata.
-    		
-    		 BodyContentHandler handler = new BodyContentHandler();
-    	      Metadata metadata = new Metadata();
-    	      FileInputStream inputstream = null;
-			try {
-				inputstream = new FileInputStream(new File(html));
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-    	      ParseContext pcontext=new ParseContext();
-    	      
-    	      //Text document parser
-    	      TXTParser  TexTParser = new TXTParser();
-    	      try {
-				TexTParser.parse(inputstream, handler, metadata,pcontext);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (SAXException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (TikaException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-    	      System.out.println("Contents of the document:" + handler.toString());
-    	      System.out.println("Metadata of the document:");
-    	      String[] metadataNames = metadata.names();
-    	      
-    	      for(String name : metadataNames) {
-    	         System.out.println(name + " : " + metadata.get(name));
-    	      }
     		
     		
     		// to Make only one file per Url
@@ -187,6 +163,57 @@ public class MultithreadedCrawler extends WebCrawler{
     		
     		if(Controller.shouldExtract){
     		// Write this to database
+    	       /* File directory = new File("D:/webcrawler/separateFiles");
+    	        File[] fList = directory.listFiles();
+
+    	        for (File file : fList){
+    	        	System.out.println("Hello"+file.getName());
+    	        	System.out.println("Path :"+file.getAbsolutePath());
+    	        	if(file.getName().equals(hashValue+".txt")){
+    	        		InputStream input = null;
+						try {
+							input = new FileInputStream(new File(file.getAbsolutePath()));
+						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+    	        		 BodyContentHandler handler = new BodyContentHandler();
+    	        	     Metadata metadata = new Metadata();
+    	        	     ParseContext pcontext=new ParseContext();
+    	        	     TXTParser  TexTParser = new TXTParser();
+    	        	      try {
+							TexTParser.parse(input, handler, metadata,pcontext);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (SAXException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (TikaException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+    	        	      System.out.println("Contents of the document:" + handler.toString());
+    	        	      System.out.println("Metadata of the document:");
+    	        	      String[] metadataNames = metadata.names();
+    	        	      
+    	        	      for(String name : metadataNames) {
+    	        	         System.out.println(name + " : " + metadata.get(name));
+    	        	      }
+    	        	   }
+    	        		
+    	        	}
+*/
+    	        
+    			
+    			
+    			
+    			
+    			
+    			
+    			
+    			
+    			
     			JSONObject ob=new JSONObject();
             	ob.put("URL", URL);
             	ob.put("hashValue",hashValue);
