@@ -70,14 +70,3 @@ task WebDao(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'web.crawler.model.WebDao'
 }
-
-task UrlDao(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'web.crawler.model.UrlDao'
-}
-
-task WebSave(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'web.crawler.controller.WebSave'
-}
-

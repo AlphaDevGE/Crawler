@@ -1,7 +1,5 @@
 package web.crawler.model;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -21,16 +19,13 @@ public class WebDao implements CommandLineRunner {
 	
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("args: " + args);
-		
-		Web web1 =  new Web(
-				"www.dummy.com", 
-				"HASH_Dummy_123456", 
-				"Dummy content ...",
-				"Dummy header ...",
-				new Date()); 
-		
-		repository.save(web1);
+
+		repository.save(
+				new Web(
+						"www.dummy.com", 
+						"HASH_Dummy_123456", 
+						"Dummy content ...",
+						"Dummy header ..."));
 		
 		
 		System.out.println("WebDao: retriving Web data from DB: findByUrl('www.dummy.com')");
@@ -39,7 +34,7 @@ public class WebDao implements CommandLineRunner {
 	}
 	
 	public static void main(String[] args) {
-//		SpringApplication.run(WebDao.class, args);
+		SpringApplication.run(WebDao.class, args);
 
 	}
 
