@@ -23,15 +23,37 @@ public class Url {
 	private Date visitedDate;
 	private String hash;
 	private String location;
+	private String metadata;
+	private String header;
+	private String title;
+	private String outgoingUrls;
+	private String parent;
 	
 	public Url(){}
 	
 	public Url(String url, Date visitedDate, String hash, String location) {
+		this.url = url;
+		this.visitedDate = visitedDate;
+		this.hash = hash;
+		this.location = location;
+		this.metadata = "null";
+		this.header = "null";
+		this.title = "null";
+		this.outgoingUrls = "null";
+		this.parent = "null";
+	}
+	public Url(String url, Date visitedDate, String hash, String location, String metadata, String header, String title,
+			String outgoingUrls, String parent) {
 		super();
 		this.url = url;
 		this.visitedDate = visitedDate;
 		this.hash = hash;
 		this.location = location;
+		this.metadata = metadata;
+		this.header = header;
+		this.title = title;
+		this.outgoingUrls = outgoingUrls;
+		this.parent = parent;
 	}
 
 	public String getId() {
@@ -74,6 +96,55 @@ public class Url {
 		this.location = location;
 	}
 	
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getMetadata() {
+		return metadata;
+	}
+
+	public void setMetadata(String metadata) {
+		this.metadata = metadata;
+	}
+
+	public String getHeader() {
+		return header;
+	}
+
+	public void setHeader(String header) {
+		this.header = header;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getOutgoingUrls() {
+		return outgoingUrls;
+	}
+
+	public void setOutgoingUrls(String outgoingUrls) {
+		this.outgoingUrls = outgoingUrls;
+	}
+
+	public String getParent() {
+		return parent;
+	}
+
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
+
+	
 	public String toString() {
 		String str = String.format(
                 "'Url':{\n"
@@ -82,10 +153,15 @@ public class Url {
               + "		'visitedDate': '%s',\n"
               + "		'hash': '%s',\n"
               + "		'location': '%s',\n"
+              + "		'title': '%s',\n"
+              + "		'parent': '%s',\n"
+              + "		'outgoingUrls': '%s',\n"
+              + "		'header': '%s',\n"
+              + "		'metadata': '%s',\n"
               + "		},\n",
-                id, url, visitedDate, hash, location
+                id, url, visitedDate, hash, location, title, parent, outgoingUrls, header, metadata
                 );
 		return str;
-	}	
+	}
 	
 }
