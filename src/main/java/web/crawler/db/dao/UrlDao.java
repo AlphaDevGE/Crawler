@@ -18,7 +18,6 @@ public class UrlDao {
 	MongoOperations mongoOperation = (MongoOperations) ctx.getBean("mongoTemplate");
 	
 	public Url getUrlByUrl(String url){
-		
 		Query findQuery = new Query();
 		findQuery.addCriteria(Criteria.where("url").is(url));
 		Url dbUrl = mongoOperation.findOne(findQuery, Url.class, DBTable.URL);
@@ -27,7 +26,6 @@ public class UrlDao {
 	}
 	
 	public Url getUrlByHash(String hash){
-
 		Query findQuery = new Query();
 		findQuery.addCriteria(Criteria.where("hash").is(hash));
 		Url dbUrl = mongoOperation.findOne(findQuery, Url.class, DBTable.URL);
@@ -36,7 +34,6 @@ public class UrlDao {
 	}
 	
 	public List<Url> getUrlListByTitle(String title){
-		
 		Query findQuery = new Query();
 		findQuery.addCriteria(Criteria.where("title").is(title));
 		List<Url> urls = mongoOperation.find(findQuery, Url.class, DBTable.URL);
@@ -44,11 +41,21 @@ public class UrlDao {
 		return urls;
 	}
 	
+	public List<Url> getAllUrls(){
+		List<Url> urls = mongoOperation.findAll(Url.class, DBTable.URL);
+		
+		return urls;
+	}
+	
+	public void dropCollection(){
+		mongoOperation.dropCollection(DBTable.URL);
+		
+	}
+	
 	public void saveUrl(Url url)
 	{
 		mongoOperation.save(url, DBTable.URL);
 	}
-	
-	
+
 	
 }

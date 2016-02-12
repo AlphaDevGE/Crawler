@@ -10,6 +10,7 @@ public class UrlAppDao {
 	
 	public static void main(String[] args) {
 		UrlDao urlDao = new UrlDao();
+		
 		Url url = urlDao.getUrlByUrl("www.URL1.com");
 		
 		//get the Url object from DB using url String 
@@ -20,10 +21,18 @@ public class UrlAppDao {
 		System.out.println("list found: ");
 		System.out.println(urls);
 		
+		//save in DB
 		Url newUrl = new Url("www.yahoo.com", new Date(), 
 				"123456789", "c:/datat/123456789.txt", "yahoo metaData", 
 				"Yahoo header", "yahoo", "www.yahoo.com/home, www.yahoo.com/profile", "www.google.com");
 		urlDao.saveUrl(newUrl);
+		
+		List<Url> urls2 = urlDao.getAllUrls();
+		System.out.println("list found: ");
+		System.out.println(urls2);
+		
+		urlDao.dropCollection();
+		System.out.println("Collection Url droped...");
 
 	}
 
