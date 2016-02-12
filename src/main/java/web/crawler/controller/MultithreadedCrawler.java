@@ -83,6 +83,8 @@ public class MultithreadedCrawler extends WebCrawler{
 	
 	@Override
 	public boolean shouldVisit(Page page,WebURL url){
+		// Here check if url is already crawled in database? If yes then return false
+		
 		 Iterator<String> it = crawledLinks.iterator();
 	     while(it.hasNext()){
 	       if(it.next().equals(emailSha(url.getURL()))){
@@ -163,7 +165,11 @@ public class MultithreadedCrawler extends WebCrawler{
     		
     		if(Controller.shouldExtract){
     		// Write this to database
-    	       /* File directory = new File("D:/webcrawler/separateFiles");
+    			
+    			
+    			
+    			// This is to extract from local storage and using tika for extraction
+    	       File directory = new File("D:/webcrawler/separateFiles");
     	        File[] fList = directory.listFiles();
 
     	        for (File file : fList){
@@ -179,10 +185,12 @@ public class MultithreadedCrawler extends WebCrawler{
 						}
     	        		 BodyContentHandler handler = new BodyContentHandler();
     	        	     Metadata metadata = new Metadata();
-    	        	     ParseContext pcontext=new ParseContext();
-    	        	     TXTParser  TexTParser = new TXTParser();
+    	        	    /* ParseContext pcontext=new ParseContext();
+    	        	     TXTParser  TexTParser = new TXTParser();*/
+    	        	     AutoDetectParser autoDetectParser=new AutoDetectParser();
     	        	      try {
-							TexTParser.parse(input, handler, metadata,pcontext);
+    	        	    	  
+							autoDetectParser.parse(input, handler, metadata);
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -203,7 +211,7 @@ public class MultithreadedCrawler extends WebCrawler{
     	        	   }
     	        		
     	        	}
-*/
+
     	        
     			
     			
