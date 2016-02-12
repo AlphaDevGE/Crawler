@@ -48,3 +48,4 @@ Temporary Items
 /build/
 /bin/
 *.bin
+src/main/java/web/crawler/model/WebRepository.java
