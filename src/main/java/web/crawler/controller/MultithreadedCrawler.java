@@ -6,16 +6,20 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.http.Header;
+import org.apache.tika.Tika;
+import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.txt.TXTParser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
@@ -42,6 +46,10 @@ import java.util.regex.Pattern;
 
 
 
+
+
+
+
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.BinaryParseData;
@@ -49,7 +57,17 @@ import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
 
+
+
 public class MultithreadedCrawler extends WebCrawler{
+	
+		  
+
+	
+
+
+
+
 	
 	public String emailSha(String url) {
 		try {
@@ -69,7 +87,8 @@ public class MultithreadedCrawler extends WebCrawler{
 	
 	@Override
      public void visit(Page page) {
-    	String  URL= page.getWebURL().getURL();
+		
+	    String  URL= page.getWebURL().getURL();
     	String hashValue =emailSha(URL);
     	System.out.println("Hashed Value is: "+hashValue);
     	String path=page.getWebURL().getPath();
@@ -83,16 +102,55 @@ public class MultithreadedCrawler extends WebCrawler{
     	String parentUrl=page.getWebURL().getParentUrl();
     	String filePath=null;
     	
+    	
+    	
     
     			
     	//	This is for crawling data
     	if (page.getParseData() instanceof HtmlParseData) {
     		HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
+    		
     		String text = htmlParseData.getText();
     		String html = htmlParseData.getHtml();
     		String title=htmlParseData.getTitle();
     		Map<String,String> metaTags=htmlParseData.getMetaTags();
     		Set<WebURL> outgoingURLS=htmlParseData.getOutgoingUrls();
+    		
+    		//Tika extracting metadata.
+    		
+    		 BodyContentHandler handler = new BodyContentHandler();
+    	      Metadata metadata = new Metadata();
+    	      FileInputStream inputstream = null;
+			try {
+				inputstream = new FileInputStream(new File(html));
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+    	      ParseContext pcontext=new ParseContext();
+    	      
+    	      //Text document parser
+    	      TXTParser  TexTParser = new TXTParser();
+    	      try {
+				TexTParser.parse(inputstream, handler, metadata,pcontext);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SAXException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (TikaException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+    	      System.out.println("Contents of the document:" + handler.toString());
+    	      System.out.println("Metadata of the document:");
+    	      String[] metadataNames = metadata.names();
+    	      
+    	      for(String name : metadataNames) {
+    	         System.out.println(name + " : " + metadata.get(name));
+    	      }
+    		
     		
     		// to Make only one file per Url
     		try{
