@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -20,9 +20,13 @@ import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
+import web.crawler.db.dao.UrlDao;
+import web.crawler.db.model.Url;
 
 public class MultithreadedCrawler extends WebCrawler {
 
+	private UrlDao urlDao = new UrlDao();
+	boolean flag = true;
 
 	public String emailSha(String url) {
 		try {
@@ -42,7 +46,18 @@ public class MultithreadedCrawler extends WebCrawler {
 		}
 	}
 
+	@Override
+	public boolean shouldVisit(Page referringPage, WebURL url) {
 	
+		if(urlDao.getUrlByUrl(url.getURL()) == null)
+			return true;
+		else
+		{
+			System.out.println("Url " +url.getURL() + " has been visited before! check in DB" );
+			flag = false;
+			return false;
+		}
+	}
 
 	@Override
 	public void visit(Page page) {
@@ -60,7 +75,8 @@ public class MultithreadedCrawler extends WebCrawler {
 			String html = htmlParseData.getHtml();
 			String title = htmlParseData.getTitle();
 			Set<WebURL> outgoingURLS = htmlParseData.getOutgoingUrls();
-
+			
+			System.out.println("outgoingURLS size:" + outgoingURLS.size());
 			// to Make only one file per Url
 		/*	try {
 				File file = new File("D:/webcrawler/spider.txt");
@@ -93,13 +109,15 @@ public class MultithreadedCrawler extends WebCrawler {
 			
 			
 			//IF extract is needed
-			if (Controller.shouldExtract) {
+			if (Controller.shouldExtract && flag) {
 				// Write this to database
 
 				// This is to extract from local storage and using tika for
 				// extraction
 				File directory = new File("D:/webcrawler/separateFiles");
 				File[] fList = directory.listFiles();
+				
+				// clean database coollection
 
 				for (File file : fList) {
 					System.out.println("Hello" + file.getName());
@@ -130,7 +148,7 @@ public class MultithreadedCrawler extends WebCrawler {
 						}
 						System.out.println("Contents of the document:"
 								+ handler.toString());
-						String text=handler.toString();
+						String headerStr = handler.toString();
 						System.out.println("Metadata of the document:");
 						String[] metadataNames = metadata.names();
 						
@@ -139,6 +157,26 @@ public class MultithreadedCrawler extends WebCrawler {
 							System.out.println(name + " : "
 									+ metadata.get(name));
 						}
+						
+						String metadataStr = "";
+						for(String meta : metadataNames)
+						{
+							metadataStr = metadataStr + meta +"\n";
+						}
+						Set<String> urlStrSet = new HashSet<String>();
+						for(WebURL weburl : outgoingURLS)
+						{
+							urlStrSet.add(weburl.getURL());
+						}
+						//save into database
+						String location = "D:/webcrawler/separateFiles/" + hashValue + ".txt";
+						
+						Url url = new Url(URL, new Date(), hashValue, location, metadataStr, 
+								headerStr, title, urlStrSet, parentUrl, headerStr);
+						
+						urlDao.saveUrl(url);
+
+						
 					}
 
 				}
@@ -149,4 +187,6 @@ public class MultithreadedCrawler extends WebCrawler {
 
 		}
 	}
+	
+
 }

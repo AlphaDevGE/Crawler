@@ -1,6 +1,7 @@
 package web.crawler.db.model;
 
 import java.util.Date;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -26,7 +27,8 @@ public class Url {
 	private String metadata;
 	private String header;
 	private String title;
-	private String outgoingUrls;
+//	private String outgoingUrls;
+	private Set<String> outgoingUrls;
 	private String parent;
 	private String content;
 	
@@ -40,11 +42,11 @@ public class Url {
 		this.metadata = "null";
 		this.header = "null";
 		this.title = "null";
-		this.outgoingUrls = "null";
+		this.outgoingUrls = null;
 		this.parent = "null";
 	}
 	public Url(String url, Date visitedDate, String hash, String location, String metadata, String header, String title,
-			String outgoingUrls, String parent, String content) {
+			Set<String> outgoingUrls, String parent, String content) {
 		super();
 		this.url = url;
 		this.visitedDate = visitedDate;
@@ -89,14 +91,6 @@ public class Url {
 	public void setHash(String hash) {
 		this.hash = hash;
 	}
-
-	public String getLoation() {
-		return location;
-	}
-
-	public void setLoation(String location) {
-		this.location = location;
-	}
 	
 	public String getLocation() {
 		return location;
@@ -130,11 +124,11 @@ public class Url {
 		this.title = title;
 	}
 
-	public String getOutgoingUrls() {
+	public Set<String> getOutgoingUrls() {
 		return outgoingUrls;
 	}
 
-	public void setOutgoingUrls(String outgoingUrls) {
+	public void setOutgoingUrls(Set<String> outgoingUrls) {
 		this.outgoingUrls = outgoingUrls;
 	}
 

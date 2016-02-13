@@ -24,7 +24,7 @@ public class UrlAppDao {
 		//save in DB
 		Url newUrl = new Url("www.yahoo.com", new Date(), 
 				"123456789", "c:/datat/123456789.txt", "yahoo metaData", 
-				"Yahoo header", "yahoo", "www.yahoo.com/home, www.yahoo.com/profile", "www.google.com", "Yahoo Content");
+				"Yahoo header", "yahoo", null , "www.google.com", "Yahoo Content");
 		urlDao.saveUrl(newUrl);
 		
 		List<Url> urls2 = urlDao.getAllUrls();
