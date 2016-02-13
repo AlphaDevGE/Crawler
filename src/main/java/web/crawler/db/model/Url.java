@@ -28,6 +28,7 @@ public class Url {
 	private String title;
 	private String outgoingUrls;
 	private String parent;
+	private String content;
 	
 	public Url(){}
 	
@@ -43,7 +44,7 @@ public class Url {
 		this.parent = "null";
 	}
 	public Url(String url, Date visitedDate, String hash, String location, String metadata, String header, String title,
-			String outgoingUrls, String parent) {
+			String outgoingUrls, String parent, String content) {
 		super();
 		this.url = url;
 		this.visitedDate = visitedDate;
@@ -54,6 +55,7 @@ public class Url {
 		this.title = title;
 		this.outgoingUrls = outgoingUrls;
 		this.parent = parent;
+		this.content = content;
 	}
 
 	public String getId() {
@@ -143,8 +145,15 @@ public class Url {
 	public void setParent(String parent) {
 		this.parent = parent;
 	}
-
 	
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
 	public String toString() {
 		String str = String.format(
                 "'Url':{\n"
