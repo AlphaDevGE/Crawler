@@ -48,6 +48,9 @@ dependencies {
     //crawler4j
     compile('edu.uci.ics:crawler4j:4.2')
     
+    //Jackson
+    compile('com.fasterxml:jackson-xml-databind:0.6.2')
+    
 
 }
 
@@ -66,7 +69,36 @@ uploadArchives {
 
 
 
-task WebDao(type: JavaExec) {
+task DataDump(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    main = 'web.crawler.model.WebDao'
+    main = 'web.crawler.controller.DataDump'
+    
+        // simple defensive programming to define optional arguments
+    if (project.hasProperty("arguments")) {
+        args arguments.split(" ")
+    }
 }
+
+task Crawler(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'web.crawler.controller.Controller'
+    
+    // simple defensive programming to define optional arguments
+    if (project.hasProperty("arguments")) {
+        args arguments.split(" ")
+    }
+}
+
+
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+	manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',  
+        	'Implementation-Version': version,
+        	'Main-Class': 'web.crawler.controller.DataDump'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+

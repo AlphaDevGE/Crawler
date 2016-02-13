@@ -1,6 +1,9 @@
 package web.crawler.controller;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
@@ -11,6 +14,7 @@ public class Controller {
 
 	
 		static boolean shouldExtract=false;
+		
 
 	public static void main(String[] args) throws Exception {
 		
@@ -25,6 +29,7 @@ public class Controller {
 		 * second (1000 milliseconds between requests).
 		 */
 		config.setPolitenessDelay(300);
+		config.setIncludeBinaryContentInCrawling(true);
 
 		/*
 		 * You can set the maximum crawl depth here. The default value is -1 for
@@ -76,8 +81,12 @@ public class Controller {
 		 * will reach the line after this only when crawling is finished.
 		 */
 		controller.start(MultithreadedCrawler.class, numberOfCrawlers);
-		
+		System.out.println("Types: ");
+		System.out.println(MultithreadedCrawler.types);
+		System.out.println(MultithreadedCrawler.images);
 		System.out.println("Finish crawling! Congratulation!");
+		
+		
 	}
 }
 

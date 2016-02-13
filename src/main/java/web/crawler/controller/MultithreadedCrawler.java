@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -18,6 +20,7 @@ import org.apache.tika.sax.BodyContentHandler;
 import org.xml.sax.SAXException;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
+import edu.uci.ics.crawler4j.parser.BinaryParseData;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 import web.crawler.db.dao.UrlDao;
@@ -27,6 +30,10 @@ public class MultithreadedCrawler extends WebCrawler {
 
 	private UrlDao urlDao = new UrlDao();
 	boolean flag = true;
+	
+	public static List<String> types = new ArrayList<String>();
+	public static List<String> images = new ArrayList<String>();
+	
 
 	public String emailSha(String url) {
 		try {
@@ -68,7 +75,28 @@ public class MultithreadedCrawler extends WebCrawler {
 		int docId = page.getWebURL().getDocid();
 		String parentUrl = page.getWebURL().getParentUrl();
 		String filePath = null;
+		types.add(page.getContentType());
+		File file = null;
+		if(page.getParseData() instanceof BinaryParseData){
+			System.out.println("IMMMMMMMMMMMMMMMMMMMMMMMMMAAAAAAAAAAAAAAAGEEEEEEEEEEEE");
+			 String url = page.getWebURL().getURL();
+			 String extension = url.substring(url.lastIndexOf('.'));
 
+			    // store image
+			    try {
+					file = new File("D:/webcrawler/separateFiles/" + hashValue
+							+ "."+extension);
+					filePath = file.getAbsolutePath();
+					FileWriter fileWriter = new FileWriter(file, true);
+					fileWriter.write("URL : " + URL + "\r\n" + "\r\n");
+					fileWriter.write("\r\n" + "HTML " + "\r\n" + page.getContentData());
+					fileWriter.flush();
+					fileWriter.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+		}
 		// This is for crawling data
 		if (page.getParseData() instanceof HtmlParseData) {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
@@ -95,7 +123,7 @@ public class MultithreadedCrawler extends WebCrawler {
 			}*/
 			// To Make separate file for each url
 			try {
-				File file = new File("D:/webcrawler/separateFiles/" + hashValue
+				file = new File("D:/webcrawler/separateFiles/" + hashValue
 						+ ".txt");
 				filePath = file.getAbsolutePath();
 				FileWriter fileWriter = new FileWriter(file, true);
@@ -119,14 +147,14 @@ public class MultithreadedCrawler extends WebCrawler {
 				
 				// clean database coollection
 
-				for (File file : fList) {
-					System.out.println("Hello" + file.getName());
-					System.out.println("Path :" + file.getAbsolutePath());
-					if (file.getName().equals(hashValue + ".txt")) {
+				for (File f : fList) {
+					System.out.println("Hello" + f.getName());
+					System.out.println("Path :" + f.getAbsolutePath());
+					if (f.getName().equals(hashValue + ".txt")) {
 						InputStream input = null;
 						try {
 							input = new FileInputStream(new File(
-									file.getAbsolutePath()));
+									f.getAbsolutePath()));
 						} catch (FileNotFoundException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -156,20 +184,26 @@ public class MultithreadedCrawler extends WebCrawler {
 						for (String name : metadataNames) {
 							System.out.println(name + " : "
 									+ metadata.get(name));
+							
+							
 						}
+						
 						
 						String metadataStr = "";
 						for(String meta : metadataNames)
 						{
-							metadataStr = metadataStr + meta +"\n";
+							metadataStr = metadataStr + meta + metadata.get(meta)+ "\n";
 						}
+						images.add(metadataStr);
+						
 						Set<String> urlStrSet = new HashSet<String>();
 						for(WebURL weburl : outgoingURLS)
 						{
 							urlStrSet.add(weburl.getURL());
 						}
 						//save into database
-						String location = "D:/webcrawler/separateFiles/" + hashValue + ".txt";
+//						String location = "D:/webcrawler/separateFiles/" + hashValue + ".txt";
+						String location = file.getAbsolutePath();
 						
 						Url url = new Url(URL, new Date(), hashValue, location, metadataStr, 
 								headerStr, title, urlStrSet, parentUrl, headerStr);
