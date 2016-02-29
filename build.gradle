@@ -51,7 +51,9 @@ dependencies {
     //Jackson
     compile('com.fasterxml:jackson-xml-databind:0.6.2')
     
-
+    //Lucene(for stopword removal)
+	compile ('org.apache.lucene:lucene-core:3.6.2')
+	compile ('org.apache.lucene:lucene-analyzers:3.6.2')
 }
 
 test {

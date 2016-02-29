@@ -3,6 +3,7 @@ package web.crawler.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,11 +14,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.xml.sax.SAXException;
+
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.BinaryParseData;
@@ -62,7 +66,7 @@ public class MultithreadedCrawler extends WebCrawler {
 		{
 			System.out.println("Url " +url.getURL() + " has been visited before! check in DB" );
 			flag = false;
-			return false;
+			return true;
 		}
 	}
 
@@ -79,17 +83,17 @@ public class MultithreadedCrawler extends WebCrawler {
 		File file = null;
 		if(page.getParseData() instanceof BinaryParseData){
 			System.out.println("IMMMMMMMMMMMMMMMMMMMMMMMMMAAAAAAAAAAAAAAAGEEEEEEEEEEEE");
+			
 			 String url = page.getWebURL().getURL();
 			 String extension = url.substring(url.lastIndexOf('.'));
-
-			    // store image
+			System.out.println("Parsed data is"+page.getContentData().toString());	    // store image
 			    try {
-					file = new File("D:/webcrawler/separateFiles/" + hashValue
-							+ "."+extension);
+					file = new File("D:/webcrawler/separateFiles/" +hashValue
+							+extension);
 					filePath = file.getAbsolutePath();
-					FileWriter fileWriter = new FileWriter(file, true);
-					fileWriter.write("URL : " + URL + "\r\n" + "\r\n");
-					fileWriter.write("\r\n" + "HTML " + "\r\n" + page.getContentData());
+					FileOutputStream fileWriter = new FileOutputStream(file, true);
+				
+					fileWriter.write(page.getContentData());
 					fileWriter.flush();
 					fileWriter.close();
 				} catch (IOException e) {
@@ -127,8 +131,8 @@ public class MultithreadedCrawler extends WebCrawler {
 						+ ".txt");
 				filePath = file.getAbsolutePath();
 				FileWriter fileWriter = new FileWriter(file, true);
-				fileWriter.write("URL : " + URL + "\r\n" + "\r\n");
-				fileWriter.write("\r\n" + "HTML " + "\r\n" + html);
+				//fileWriter.write("URL : " + URL + "\r\n" + "\r\n");
+				fileWriter.write( html);
 				fileWriter.flush();
 				fileWriter.close();
 			} catch (IOException e) {
