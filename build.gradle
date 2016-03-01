@@ -54,6 +54,10 @@ dependencies {
     //Lucene(for stopword removal)
 	compile ('org.apache.lucene:lucene-core:3.6.2')
 	compile ('org.apache.lucene:lucene-analyzers:3.6.2')
+	
+	//Hadoop
+	compile('org.apache.hadoop:hadoop-common:2.7.2')
+	compile 'org.apache.hadoop:hadoop-mapreduce-client-core:2.7.2'
 }
 
 test {
