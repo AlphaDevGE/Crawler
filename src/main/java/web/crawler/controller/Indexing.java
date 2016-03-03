@@ -29,11 +29,13 @@ import org.apache.lucene.index.FilterIndexReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.TermDocs;
 import org.apache.lucene.index.TermFreqVector;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.index.TermPositionVector;
+import org.apache.lucene.index.TermPositions;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.IndexableBinaryStringTools;
@@ -52,7 +54,7 @@ public class Indexing {
 	
 	//Apply Stripper and StopWord Removal and Stemmer
 	
-
+		
 		HTMLStripCharFilter filter=new HTMLStripCharFilter(CharReader.get(new FileReader(fList[0])));
 		Analyzer an=new StandardAnalyzer(version);
 		TokenStream ts=an.tokenStream(null,filter );
@@ -79,14 +81,45 @@ public class Indexing {
 	for(File f:fList){
 	Document doc=new Document();
 	Reader r=new FileReader(f);
-	doc.add(new Field("content",ts,Field.TermVector.WITH_POSITIONS ));
+	doc.add(new Field("content",r,Field.TermVector.WITH_POSITIONS ));
 	writer.addDocument(doc);
 	}
 	writer.close();
 	File indexDirectory = new File("D:/webcrawler/Indexing");
 	IndexReader reader = IndexReader.open(FSDirectory.open(indexDirectory));
-	TermFreqVector vtr=reader.getTermFreqVector(0, "content");
+	System.out.println("No of document"+reader.numDocs());
+	System.out.println("Enumeration of all terms in the index by reader.terms()");
+	TermEnum allTerms=reader.terms();
+	
+	while(allTerms.next()){
+		String term=(allTerms.term().text());
+		int documentFrequency=reader.docFreq(allTerms.term());
+		TermPositions data=reader.termPositions(allTerms.term());
+		String output=term +" ==> ";
+		String apnd="< ";
+		while(data.next()){
+			int documentNo=(data.doc());
+			int termFrequency=(data.freq());
+			
+			String positions = "<";
+			for(int i=0;i<data.freq();i++){
+			positions+=" "+(data.nextPosition());
+			}
+			positions+=">";
+			
+			apnd+=documentNo+" "+termFrequency+" "+positions;
+		}
+		System.out.println(output);
+		System.out.println(apnd);
+		
+	
+	
+	}
+	
+	/*TermFreqVector vtr=reader.getTermFreqVector(0, "content");
+
 	TermPositionVector tpvector = (TermPositionVector)vtr;
+	
 	String[] terms=tpvector.getTerms();
 	int tf[]=tpvector.getTermFrequencies();
 	for(int i=0;i<terms.length;i++){
@@ -98,7 +131,7 @@ public class Indexing {
 		str+=posi+" ";
 	}
 	System.out.println(terms[i]+"   Frequency: "+tf[i]+"Pos: "+str);
-	}
+	}*/
 	}
 	
 	    }
