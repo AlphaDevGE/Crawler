@@ -11,10 +11,8 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class Controller {
-
 	
-		static boolean shouldExtract=false;
-		
+	static boolean shouldExtract=false;
 
 	public static void main(String[] args) throws Exception {
 		

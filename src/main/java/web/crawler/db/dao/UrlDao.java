@@ -17,6 +17,16 @@ public class UrlDao {
 	private ApplicationContext ctx = new AnnotationConfigApplicationContext(UrlConfig.class);
 	MongoOperations mongoOperation = (MongoOperations) ctx.getBean("mongoTemplate");
 	
+	
+	public List<Url> getUrlByTerm(String term){
+		Query findQuery = new Query();
+		findQuery.addCriteria(Criteria.where("url").regex(term+".*"));
+		List<Url> urls = mongoOperation.find(findQuery, Url.class, DBTable.URL);
+		
+		return urls;
+	}
+	
+	
 	public Url getUrlByUrl(String url){
 		Query findQuery = new Query();
 		findQuery.addCriteria(Criteria.where("url").is(url));
