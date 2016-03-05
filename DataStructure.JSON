@@ -37,7 +37,7 @@ Doc{
 WordDoc
 {
 	doc_hash: 
-	Link_analysis_rank: 
+	page_ranking: 
 	TF:
 	IDF:
 	TF-IDF:
