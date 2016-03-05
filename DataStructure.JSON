@@ -1,0 +1,70 @@
+// following is the datasructure we require for search engine
+
+/* other considirations can be:
+	1- avoiding stpo words in Index table
+	2- How should we rank the scoring in the WordDoc (define a formula)
+	3- Do the dynamic ranking at the time of search like calculating the position and closeness of 2 or more words searched
+	
+	4- in future we might need to create or refer to Dictionary table to search base on meaning or slight typing mistakes
+		Ex: instead of 'apple' what is someone searches for 'aple' ?
+*/
+
+//Doc is an object of Doc in the Big-Table
+Doc{
+    "_id" : ObjectId("56bfa1812467ee78eb31f983"),
+    "_class" : "web.crawler.db.model.Url",
+    "url" : "http://www.pasadenabiosci.com/",
+    "visitedDate" : ISODate("2016-02-13T21:34:57.844Z"),
+    "hash" : "330f4b04e42ff9a447056fb4271ac05068060dbd89d89b009c73209fca41548c",
+    "location" : "D:\\webcrawler\\separateFiles\\330f4b04e42ff9a447056fb4271ac05068060dbd89d89b009c73209fca41548c.txt",
+    "metadata" : "X-Parsed-Byorg.apache.tika.parser.DefaultParser\ndc:titlePasadena BioScience Collaborative\nContent-Encodingwindows-1252\ntitlePasadena BioScience Collaborative\nContent-Typetext/html; charset=windows-1252\n",
+    "header" : "URL : http://www.pasadenabiosci.com/\n\n\nHTML \n\n\n\t\t",
+    "title" : "Pasadena BioScience Collaborative",
+    "outgoingUrls" : [ 
+        "http://www.pasadenabiosci.org/"
+    ],
+    "parent" : "http://www.calstatela.edu/",
+    "content" : "URL : http://www.pasadenabiosci.com/\n\n\nHTML \n\n\n\t\t"
+
+    //more data
+    Link_analysis_rank : 
+    paret_hash : 
+    outgoingUrls_hash : []
+
+}
+
+//WordDoc is an object that is going to be in Index table with relevant to term
+WordDoc
+{
+	doc_hash: 
+	Link_analysis_rank: 
+	TF:
+	IDF:
+	TF-IDF:
+	no_of_appearance: 
+	positions: [3, 20, 100, ...]
+	ranks: [ contecnt: No, 
+			 title: No, 
+			 meta: No],
+	
+
+	meta_data: [ no_of_appearance: No,
+				 .... ],
+
+	//maybe we can have no of appearance based on content, meta, header, title
+	no_of_appearance: [ content: no, header: no, title: no, meta: no],
+	appearance_positions[ content: [1, 10, 20, ...],  
+						  header: [11, 110, 120, ...], 
+						  title: [21, 210, 220, ...], 
+						  meta: [31, 310, 320, ...] 
+						],
+
+	score: //calculating ranks, TF, IDF, TF-IDF and may be more
+}
+
+//Index table will have term and term's appearance in WordDocs.
+Index
+{
+	term: "google",
+	docs: [ WordDoc1, WordDoc2, WordDoc3, ...., WordDocN ],
+}
