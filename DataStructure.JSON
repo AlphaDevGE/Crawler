@@ -65,6 +65,7 @@ WordDoc
 //Index table will have term and term's appearance in WordDocs.
 Index
 {
-	term: "google",
+	id: No,
+	term: "google", 
 	docs: [ WordDoc1, WordDoc2, WordDoc3, ...., WordDocN ],
 }

@@ -1,7 +1,5 @@
 package web.crawler.db.controller;
 
-import java.util.Date;
-import java.util.List;
 
 import web.crawler.db.dao.UrlDao;
 import web.crawler.db.model.Url;
@@ -19,7 +17,6 @@ public class UrlAppDao {
 		
 		//get the Url object from DB using url String 
 //		System.out.println(url);
-		
 		
 //		List<Url> urls = urlDao.getUrlListByTitle("google");
 //		System.out.println("list found: ");
