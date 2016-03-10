@@ -24,8 +24,6 @@ public class Doc {
 	 *
 	 ******/
 	
-	
-	
 	@Id
 	private String id;
 	
@@ -52,8 +50,6 @@ public class Doc {
 	
 	public Doc(){}
 
-
-
 	public Doc(String url, Date visitedDate, String hash, String location, String metadata, String header, String title,
 			Set<String> outgoingDocsStr, Set<Doc> outgoingDocs, Set<Doc> incomingDocs, String parentStr,
 			Doc parentDoc) {
@@ -72,215 +68,109 @@ public class Doc {
 		this.parentDoc = parentDoc;
 	}
 
-
-
 	public String getId() {
 		return id;
 	}
-
-
-
-
 
 	public void setId(String id) {
 		this.id = id;
 	}
 
-
-
-
-
 	public String getUrl() {
 		return url;
 	}
-
-
-
-
 
 	public void setUrl(String url) {
 		this.url = url;
 	}
 
-
-
-
-
 	public Date getVisitedDate() {
 		return visitedDate;
 	}
-
-
-
-
 
 	public void setVisitedDate(Date visitedDate) {
 		this.visitedDate = visitedDate;
 	}
 
-
-
-
-
 	public String getHash() {
 		return hash;
 	}
-
-
-
-
 
 	public void setHash(String hash) {
 		this.hash = hash;
 	}
 
-
-
-
-
 	public String getLocation() {
 		return location;
 	}
-
-
-
-
 
 	public void setLocation(String location) {
 		this.location = location;
 	}
 
-
-
-
-
 	public String getMetadata() {
 		return metadata;
 	}
-
-
-
-
 
 	public void setMetadata(String metadata) {
 		this.metadata = metadata;
 	}
 
-
-
-
-
 	public String getHeader() {
 		return header;
 	}
-
-
-
-
 
 	public void setHeader(String header) {
 		this.header = header;
 	}
 
-
-
-
-
 	public String getTitle() {
 		return title;
 	}
-
-
-
-
 
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
-
-
-
-
 	public Set<String> getOutgoingDocsStr() {
 		return outgoingDocsStr;
 	}
-
-
-
-
 
 	public void setOutgoingDocsStr(Set<String> outgoingDocsStr) {
 		this.outgoingDocsStr = outgoingDocsStr;
 	}
 
-
-
-
-
 	public Set<Doc> getOutgoingDocs() {
 		return outgoingDocs;
 	}
-
-
-
-
 
 	public void setOutgoingDocs(Set<Doc> outgoingDocs) {
 		this.outgoingDocs = outgoingDocs;
 	}
 
-
-
-
-
 	public Set<Doc> getIncomingDocs() {
 		return incomingDocs;
 	}
-
-
-
-
 
 	public void setIncomingDocs(Set<Doc> incomingDocs) {
 		this.incomingDocs = incomingDocs;
 	}
 
-
-
-
-
 	public String getParentStr() {
 		return parentStr;
 	}
-
-
-
-
 
 	public void setParentStr(String parentStr) {
 		this.parentStr = parentStr;
 	}
 
-
-
-
-
 	public Doc getParentDoc() {
 		return parentDoc;
 	}
 
-
-
-
-
 	public void setParentDoc(Doc parentDoc) {
 		this.parentDoc = parentDoc;
 	}
-
-
-
-
 
 	public String toString() {
 		String str = String.format(
