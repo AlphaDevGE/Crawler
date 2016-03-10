@@ -1,21 +1,19 @@
 package web.crawler.db.controller;
 
 
-import web.crawler.db.dao.DocDao;
 import web.crawler.db.dao.UrlDao;
-import web.crawler.db.model.Doc;
 import web.crawler.db.model.Url;
 
-public class UrlAppDao {
+public class DocAppDao {
 	
 	public static void main(String[] args) {
-		DocDao docDao = new DocDao();
+		UrlDao urlDao = new UrlDao();
 		
-		Doc doc = docDao.getDocByUrl("https://www.yahoo.com/parenting/");
+		Url url = urlDao.getUrlByUrl("https://www.yahoo.com/parenting/");
 		
 		// test data from Db
-		System.out.println("Metadate found for: " + doc.getUrl());
-		System.out.println(doc.getMetadata());
+		System.out.println("Metadate found for: " + url.getUrl());
+		System.out.println(url.getMetadata());
 		
 		//get the Url object from DB using url String 
 //		System.out.println(url);
