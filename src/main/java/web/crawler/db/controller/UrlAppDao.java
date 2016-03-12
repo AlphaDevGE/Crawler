@@ -1,10 +1,7 @@
 package web.crawler.db.controller;
 
-
 import web.crawler.db.dao.DocDao;
-import web.crawler.db.dao.UrlDao;
 import web.crawler.db.model.Doc;
-import web.crawler.db.model.Url;
 
 public class UrlAppDao {
 	

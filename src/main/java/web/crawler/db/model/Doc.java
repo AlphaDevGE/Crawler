@@ -1,6 +1,8 @@
 package web.crawler.db.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
@@ -11,24 +13,20 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import web.crawler.constant.DBTable;
 
+/**
+ * 
+ * Doc model class will save the web page that is being crawled and extracted
+ * After completion crawling and extraction the incomingDocStr and pageRanking must be calculated
+ * 
+ * @author AlphaDev, Mohammad Yazdani 
+ * @email m.yazdani2010@gmail.com
+ * 
+ */
+
 @Document(collection = DBTable.DOC)
-public class Doc {
-		
-	
-	/****
-	 * 	To do: make the toString()
-	 * 	populate the following while doing the page ranking:
-	 * 	private Set<Doc> outgoingDocs;
-	 *	private Set<Doc> incomingDocs;
-	 *	private Doc parentDoc;
-	 *
-	 ******/
-	
+public class Doc {	
 	@Id
 	private String id;
-	
-//	@Indexed
-//	private String ic;
 	
 	private String url;
 
@@ -41,33 +39,34 @@ public class Doc {
 	private String metadata;
 	private String header;
 	private String title;
-//	private String outgoingUrls;
+	private String path;
 	private Set<String> outgoingDocsStr;
-	private Set<Doc> outgoingDocs;
-	private Set<Doc> incomingDocs;
+	private Set<String> incomingDocsStr;
+	private Set<Address> outgoingAddresses;
+	private Set<Address> incomingAddresses;
 	private String parentStr;
-	private Doc parentDoc;
+	private List<Double> pageRankings;
 	
 	public Doc(){}
 
-	public Doc(String url, Date visitedDate, String hash, String location, String metadata, String header, String title,
-			Set<String> outgoingDocsStr, Set<Doc> outgoingDocs, Set<Doc> incomingDocs, String parentStr,
-			Doc parentDoc) {
+	public Doc(String url, Date visitedDate, String hash, String location, String metadata, String header, String title, String path,
+			Set<String> outgoingDocsStr, String parentStr) {
 		super();
 		this.url = url;
 		this.visitedDate = visitedDate;
 		this.hash = hash;
 		this.location = location;
+		this.path = path;
 		this.metadata = metadata;
 		this.header = header;
 		this.title = title;
 		this.outgoingDocsStr = outgoingDocsStr;
-		this.outgoingDocs = outgoingDocs;
-		this.incomingDocs = incomingDocs;
+		this.incomingDocsStr =  new HashSet<String>();
+		this.outgoingAddresses =  new HashSet<Address>();
+		this.incomingAddresses =  new HashSet<Address>();
 		this.parentStr = parentStr;
-		this.parentDoc = parentDoc;
 	}
-
+		
 	public String getId() {
 		return id;
 	}
@@ -108,6 +107,14 @@ public class Doc {
 		this.location = location;
 	}
 
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
 	public String getMetadata() {
 		return metadata;
 	}
@@ -140,20 +147,28 @@ public class Doc {
 		this.outgoingDocsStr = outgoingDocsStr;
 	}
 
-	public Set<Doc> getOutgoingDocs() {
-		return outgoingDocs;
+	public Set<String> getIncomingDocsStr() {
+		return incomingDocsStr;
 	}
 
-	public void setOutgoingDocs(Set<Doc> outgoingDocs) {
-		this.outgoingDocs = outgoingDocs;
+	public void setIncomingDocsStr(Set<String> incomingDocsStr) {
+		this.incomingDocsStr = incomingDocsStr;
 	}
 
-	public Set<Doc> getIncomingDocs() {
-		return incomingDocs;
+	public Set<Address> getOutgoingAddresses() {
+		return outgoingAddresses;
 	}
 
-	public void setIncomingDocs(Set<Doc> incomingDocs) {
-		this.incomingDocs = incomingDocs;
+	public void setOutgoingAddresses(Set<Address> outgoingAddresses) {
+		this.outgoingAddresses = outgoingAddresses;
+	}
+
+	public Set<Address> getIncomingAddresses() {
+		return incomingAddresses;
+	}
+
+	public void setIncomingAddresses(Set<Address> incomingAddresses) {
+		this.incomingAddresses = incomingAddresses;
 	}
 
 	public String getParentStr() {
@@ -164,29 +179,33 @@ public class Doc {
 		this.parentStr = parentStr;
 	}
 
-	public Doc getParentDoc() {
-		return parentDoc;
+	public List<Double> getPageRankings() {
+		return pageRankings;
 	}
 
-	public void setParentDoc(Doc parentDoc) {
-		this.parentDoc = parentDoc;
+	public void setPageRankings(List<Double> pageRankings) {
+		this.pageRankings = pageRankings;
 	}
 
 	public String toString() {
 		String str = String.format(
-                "'Url':{\n"
+                "'Doc':{\n"
               + "		'id': %s,\n"
               + "		'url': '%s',\n"
               + "		'visitedDate': '%s',\n"
               + "		'hash': '%s',\n"
               + "		'location': '%s',\n"
+              + "		'outgoingDocsStr': '%s',\n"
+              + "		'incomingDocsStr': '%s',\n"
+              + "		'pageRankings': '%s',\n"
               + "		'title': '%s',\n"
               + "		'parent': '%s',\n"
               + "		'outgoingUrls': '%s',\n"
               + "		'header': '%s',\n"
               + "		'metadata': '%s',\n"
               + "		},\n",
-                id, url, visitedDate, hash, location, title, header, metadata
+                id, url, visitedDate, hash, location,outgoingDocsStr, 
+                incomingDocsStr, pageRankings, title, parentStr, header, metadata
                 );
 		return str;
 	}

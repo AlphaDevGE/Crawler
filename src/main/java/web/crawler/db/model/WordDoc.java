@@ -1,17 +1,21 @@
 package web.crawler.db.model;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import web.crawler.constant.DBTable;
-
+/**
+ * 
+ * DocWord model class will save the document details corresponding to the String term
+ * that is being indexed in the Index object
+ * 
+ * @author AlphaDev, Mohammad Yazdani 
+ * @email m.yazdani2010@gmail.com
+ * 
+ */
 @Document(collection = DBTable.WORD_DOC)
 public class WordDoc {
 			
@@ -45,84 +49,92 @@ public class WordDoc {
 */	
 	@Id
 	private String id;
-	
+		
 	@Indexed
 	private String docHash;
-	private double pageRanking;
+	
+	private String term;
 	private double tf;
 	private double idf;
 	private double tfIdf;
-	private int apearanceTime;
 	private List<Integer> postitions;
 	private double score;
-	private Doc doc;
+	private Doc doc;//the source Doc that is 
 	
 	public WordDoc(){ super(); }
 	
-	public WordDoc(String docHash, double pageRanking, double tf, double idf, double tfIdf, int apearanceTime,
-			List<Integer> postitions, double score) {
+	public WordDoc(String docHash, String term, double tf, double idf, double tfIdf, List<Integer> postitions,
+			double score, Doc doc) {
 		super();
 		this.docHash = docHash;
-		this.pageRanking = pageRanking;
+		this.term = term.toLowerCase();
 		this.tf = tf;
 		this.idf = idf;
 		this.tfIdf = tfIdf;
-		this.apearanceTime = apearanceTime;
 		this.postitions = postitions;
 		this.score = score;
+		this.doc = doc;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
+	
 	public void setId(String id) {
 		this.id = id;
 	}
+	
 	public String getDocHash() {
 		return docHash;
 	}
+	
 	public void setDocHash(String docHash) {
 		this.docHash = docHash;
 	}
-	public double getPageRanking() {
-		return pageRanking;
+	
+	public String getTerm() {
+		return term;
 	}
-	public void setPageRanking(double pageRanking) {
-		this.pageRanking = pageRanking;
+
+	public void setTerm(String term) {
+		this.term = term;
 	}
+
 	public double getTf() {
 		return tf;
 	}
 	public void setTf(double tf) {
 		this.tf = tf;
 	}
+	
 	public double getIdf() {
 		return idf;
 	}
+	
 	public void setIdf(double idf) {
 		this.idf = idf;
 	}
+	
 	public double getTfIdf() {
 		return tfIdf;
 	}
+	
 	public void setTfIdf(double tfIdf) {
 		this.tfIdf = tfIdf;
 	}
-	public int getApearanceTime() {
-		return apearanceTime;
-	}
-	public void setApearanceTime(int apearanceTime) {
-		this.apearanceTime = apearanceTime;
-	}
+
 	public List<Integer> getPostitions() {
 		return postitions;
 	}
+	
 	public void setPostitions(List<Integer> postitions) {
 		this.postitions = postitions;
 	}
+	
 	public double getScore() {
 		return score;
 	}
+	
 	public void setScore(double score) {
 		this.score = score;
 	}
@@ -135,5 +147,22 @@ public class WordDoc {
 		this.doc = doc;
 	}
 	
+	public String toString() {
+		String str = String.format(
+                "'WordDoc':{\n"
+              + "		'id': %s,\n"
+              + "		'docHash': '%s',\n"
+              + "		'term': '%s',\n"
+              + "		'tf': '%s',\n"
+              + "		'idf': '%s',\n"
+              + "		'tfIdf': '%s',\n"
+              + "		'postitions': '%s',\n"
+              + "		'score': '%s',\n"
+              + "		'doc': '%s',\n"
+              + "		},\n",
+                id, docHash, term, tf, idf, tfIdf, postitions, score, doc
+                );
+		return str;
+	}
 	
 }
