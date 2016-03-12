@@ -81,7 +81,10 @@ public class Extraction {
 			        System.out.println("for file "+f.getAbsolutePath()+"/"+f.getName()+" Links Are");
 			        Set<String> urlStrSet = new HashSet<String>();
 			        for (Element link : links) {
-			           urlStrSet.add(link.attr("href"));
+			        	String outgoingLink=link.attr("href");
+			        	String[] breakSlashes=outgoingLink.split("/");
+			        	String outUrl=breakSlashes[breakSlashes.length-1];
+			           urlStrSet.add(outUrl);
 			        }
 			       String title=doc.title();
 					
