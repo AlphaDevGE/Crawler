@@ -28,21 +28,21 @@
 			type="text" id="search" name="search" class="search col-lg-4" />
 
 	</div> -->
-<div class="container">
-<img src="search.png" class="center">
-	<form class="form-horizontal col-lg-12">
-	
-		<div class="form-group">
-			<div class="ui-widget">
-				<label class="col-lg-1 control-label">Search: </label>
-				<div class="col-lg-6">
-					<input type="text" id="search" name="search" class="form-control" />
-				</div>
-			</div>
-			
-		</div>
-	</form>
+	<div class="container">
+		<img src="search.png" class="center">
+		<form class="form-horizontal col-lg-12">
 
-</div>
+			<div class="form-group">
+				<div class="ui-widget">
+					<label class="col-lg-1 control-label">Search: </label>
+					<div class="col-lg-6">
+						<input type="text" id="search" name="search" class="form-control" />
+					</div>
+				</div>
+
+			</div>
+		</form>
+
+	</div>
 </body>
 </html>

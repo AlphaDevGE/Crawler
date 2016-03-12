@@ -103,28 +103,14 @@ public class MultithreadedCrawler extends WebCrawler {
 		}
 		// This is for crawling data
 		if (page.getParseData() instanceof HtmlParseData) {
+		
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String html = htmlParseData.getHtml();
 			String title = htmlParseData.getTitle();
 			Set<WebURL> outgoingURLS = htmlParseData.getOutgoingUrls();
 			
 			System.out.println("outgoingURLS size:" + outgoingURLS.size());
-			// to Make only one file per Url
-		/*	try {
-				File file = new File("D:/webcrawler/spider.txt");
-				FileWriter fileWriter = new FileWriter(file, true);
-				fileWriter.write("URL : " + URL + "\r\n" + "\r\n");
-				fileWriter.write("Headers" + "\r\n");
-				for (Header header : headers) {
-					fileWriter.write(header.getName() + ": "
-							+ header.getValue() + "\r\n");
-				}
-				fileWriter.write("\r\n" + "HTML " + "\r\n" + html);
-				fileWriter.flush();
-				fileWriter.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}*/
+			
 			// To Make separate file for each url
 			try {
 				file = new File("D:/webcrawler/separateFiles/" + hashValue
@@ -152,9 +138,7 @@ public class MultithreadedCrawler extends WebCrawler {
 				// clean database coollection
 
 				for (File f : fList) {
-					System.out.println("Hello" + f.getName());
-					System.out.println("Path :" + f.getAbsolutePath());
-					if (f.getName().equals(hashValue + ".txt")) {
+						if (f.getName().equals(hashValue + ".txt")) {
 						InputStream input = null;
 						try {
 							input = new FileInputStream(new File(
