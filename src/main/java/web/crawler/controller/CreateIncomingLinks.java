@@ -30,10 +30,11 @@ public class CreateIncomingLinks {
 			for(String outgoingUrl: d.getOutgoingDocsStr())
 			{			
 				Doc outgoingDoc = docDao.getDocByUrl(outgoingUrl);
-				System.out.println("**** OutgoingUrl Found: " + outgoingDoc.getUrl() );
+				
 				//if corresponding outgoing Doc found in DB
 				if( outgoingDoc != null)
 				{
+					System.out.println("**** OutgoingUrl Found: " + outgoingDoc.getUrl() );
 					if(outgoingDoc.getIncomingDocsStr() == null)
 						outgoingDoc.setIncomingDocsStr(new HashSet<String>());
 					if(outgoingDoc.getIncomingAddresses() == null)
