@@ -1,12 +1,14 @@
 package web.crawler.db.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 
 import web.crawler.constant.DBTable;
 import web.crawler.db.bean.UrlConfig;
@@ -36,6 +38,14 @@ public class DocDao {
 		return dbDoc;
 	}
 	
+	public Doc getDocByPath(String path){
+		Query findQuery = new Query();
+		findQuery.addCriteria(Criteria.where("path").is(path));
+		Doc dbDoc = mongoOperation.findOne(findQuery, Doc.class, DBTable.DOC);
+		
+		return dbDoc;
+	}
+	
 	public Doc getDocByHash(String hash){
 		Query findQuery = new Query();
 		findQuery.addCriteria(Criteria.where("hash").is(hash));
@@ -52,7 +62,7 @@ public class DocDao {
 		return docs;
 	}
 	
-	public List<Doc> getAllUrls(){
+	public List<Doc> getAllDocs(){
 		List<Doc> docs = mongoOperation.findAll(Doc.class, DBTable.DOC);
 		
 		return docs;
@@ -63,9 +73,18 @@ public class DocDao {
 		
 	}
 	
-	public void saveUrl(Doc doc)
+	public void saveDoc(Doc doc)
 	{
 		mongoOperation.save(doc, DBTable.DOC);
+		
+	}
+	
+	public void updateIncommingLink(String url, Set<String> incomingSet)
+	{
+		Query findQuery = new Query();
+		findQuery.addCriteria(Criteria.where("url").is( url ));
+		Doc dbDoc = mongoOperation.findOne(findQuery, Doc.class, DBTable.DOC);
+		mongoOperation.updateFirst(findQuery, Update.update("incomingDocsStr", incomingSet), DBTable.DOC);		
 	}
 
 	

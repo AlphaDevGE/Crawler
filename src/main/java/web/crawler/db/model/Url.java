@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -16,10 +15,6 @@ public class Url {
 		
 	@Id
 	private String id;
-	
-//	@Indexed
-//	private String ic;
-	
 	private String url;
 
 	@DateTimeFormat(iso = ISO.DATE_TIME)
@@ -29,7 +24,6 @@ public class Url {
 	private String metadata;
 	private String header;
 	private String title;
-//	private String outgoingUrls;
 	private Set<String> outgoingUrls;
 	private String parent;
 	private String content;
@@ -168,5 +162,4 @@ public class Url {
                 );
 		return str;
 	}
-	
 }

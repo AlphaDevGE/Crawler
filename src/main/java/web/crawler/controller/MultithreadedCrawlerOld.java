@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
@@ -26,12 +27,12 @@ import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.BinaryParseData;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
-import web.crawler.db.dao.DocDao;
-import web.crawler.db.model.Doc;
+import web.crawler.db.dao.UrlDao;
+import web.crawler.db.model.Url;
 
-public class MultithreadedCrawler extends WebCrawler {
+public class MultithreadedCrawlerOld extends WebCrawler {
 
-	private DocDao docDao = new DocDao();
+	private UrlDao urlDao = new UrlDao();
 	boolean flag = true;
 	
 	public static List<String> types = new ArrayList<String>();
@@ -59,11 +60,11 @@ public class MultithreadedCrawler extends WebCrawler {
 	@Override
 	public boolean shouldVisit(Page referringPage, WebURL url) {
 	
-		if(docDao.getDocByUrl(url.getURL()) == null)
+		if(urlDao.getUrlByUrl(url.getURL()) == null)
 			return true;
 		else
 		{
-			System.out.println("Doc " +url.getURL() + " has been visited before! check in DB" );
+			System.out.println("Url " +url.getURL() + " has been visited before! check in DB" );
 			flag = false;
 			return true;
 		}
@@ -208,11 +209,12 @@ public class MultithreadedCrawler extends WebCrawler {
 //						String location = "D:/webcrawler/separateFiles/" + hashValue + ".txt";
 						String location = file.getAbsolutePath();
 						
-						Doc doc = new Doc(URL, new Date(), hashValue, location, null,  metadataStr, 
-								headerStr, title, urlStrSet,parentUrl); 
-					
-						docDao.saveDoc(doc);
+						Url url = new Url(URL, new Date(), hashValue, location, metadataStr, 
+								headerStr, title, urlStrSet, parentUrl, headerStr);
+						
+						urlDao.saveUrl(url);
 
+						
 					}
 
 				}

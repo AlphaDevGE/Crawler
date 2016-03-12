@@ -7,6 +7,7 @@ import java.util.List;
 import web.crawler.db.dao.IndexDao;
 import web.crawler.db.dao.UrlDao;
 import web.crawler.db.dao.WordDocDao;
+import web.crawler.db.model.Doc;
 import web.crawler.db.model.Index;
 import web.crawler.db.model.Url;
 import web.crawler.db.model.WordDoc;
@@ -24,8 +25,10 @@ public class IndexTestDao {
 		list.add(1);
 		list.add(11);
 		list.add(111);
-		WordDoc wd1 = new WordDoc("111111", 1.25, 1.1, 1.50, 1, 3, list, 1);
-		WordDoc wd2 = new WordDoc("222222", 2.25, 2.1, 2.50, 2, 5, list, 2);
+		//String docHash, String term, double tf, double idf, double tfIdf, List<Integer> postitions,
+		//double score, Doc doc
+		WordDoc wd1 = new WordDoc("111111", "cat", 1.25, 1.1, 1.50, list, 1, null);
+		WordDoc wd2 = new WordDoc("222222", "dog", 2.25, 2.1, 2.50, list, 2, null);
 		
 		Index i1 = new Index("cat", new ArrayList<WordDoc>());
 		i1.addWordDoc(wd1);
