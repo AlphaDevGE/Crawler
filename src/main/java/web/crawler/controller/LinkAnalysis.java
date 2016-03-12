@@ -61,6 +61,7 @@ public class LinkAnalysis {
 			docDao.saveDoc(d1);
 		}
 	
+	
 //		for(Doc d: docs)
 //		{
 //			System.out.println("****** No of OutgoingUrl found: " + d.getOutgoingDocsStr().size() );
