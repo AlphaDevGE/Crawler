@@ -159,7 +159,7 @@ public class Indexing {
 				wd.setDocHash(documentLocation);
 				int termsInDoc = getNoOfTermsInDoc(reader, documentNo);
 				int appearanceTime=data.freq();
-				wd.setApearanceTime(appearanceTime);
+				
 				double tf = 1 + Math.log10(data.freq());
 				wd.setTf(tf);
 				double idf = simi.idf(documentFrequency, reader.numDocs());

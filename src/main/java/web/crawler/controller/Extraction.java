@@ -22,7 +22,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.xml.sax.SAXException;
 
+import web.crawler.db.dao.DocDao;
 import web.crawler.db.dao.UrlDao;
+import web.crawler.db.model.Doc;
 import web.crawler.db.model.Url;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
@@ -30,7 +32,7 @@ import edu.uci.ics.crawler4j.parser.ParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
 public class Extraction {
-	private static UrlDao urlDao = new UrlDao();
+	private static DocDao docDao = new DocDao();
 	static String emailSha(String url) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -107,8 +109,10 @@ public class Extraction {
 				String parentUrl=null;
 				String headerStr=handler.toString();
 	            
-	            	Url url=new Url(f.getName(),new Date(), emailSha(f.getName()),location,metadataStr,headerStr, title, urlStrSet, parentUrl, headerStr);
-	            	urlDao.saveUrl(url);
+	            	
+	            	Doc docDb =new Doc(f.getName(),new Date(), emailSha(f.getName()),
+	            			location,metadataStr ,null,title,location,urlStrSet, parentUrl);
+	            	docDao.saveDoc(docDb);
 	            }
 	        }
 	    }
