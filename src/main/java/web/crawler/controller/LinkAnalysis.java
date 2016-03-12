@@ -37,17 +37,28 @@ public class LinkAnalysis {
 				
 				for(String str : d2.getOutgoingDocsStr())
 				{
+					//check for the incoming URL doc if found
 					if(str.equals(d1.getUrl()))
 					{
 						incomings.add(d2.getUrl());
 						incomingAddresses.add(new Address(d2.getUrl(), d2.getPath(), d2.getOutgoingDocsStr().size()));
-					}	
+					}
+					
+					//check for the outgoing URl if exist in DB then create the outgoingAddress out of it
+					for(String outgoingStr : d1.getOutgoingDocsStr())
+					{
+						if(outgoingStr.equals(d2.getUrl()))
+						{
+							outgoingAddresses.add(new Address(d2.getUrl(), d2.getPath(), d2.getOutgoingDocsStr().size()));
+						}
+					}
+					
 				}
 			}
 			
 			d1.setIncomingDocsStr(incomings);
 			d1.setIncomingAddresses(incomingAddresses);
-			
+			d1.setOutgoingAddresses(outgoingAddresses);
 			
 			docDao.saveDoc(d1);
 		}
