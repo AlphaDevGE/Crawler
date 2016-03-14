@@ -33,6 +33,11 @@ import edu.uci.ics.crawler4j.url.WebURL;
 
 public class Extraction {
 	private static DocDao docDao = new DocDao();
+	
+
+	
+	
+	
 	static String emailSha(String url) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
