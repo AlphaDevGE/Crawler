@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import web.crawler.constant.Value;
 import web.crawler.db.dao.DocDao;
+import web.crawler.db.model.Address;
 import web.crawler.db.model.Doc;
 
 public class PageRanking {
@@ -29,52 +31,76 @@ public class PageRanking {
 		DocDao docDao = new DocDao();
 		docs = docDao.getAllDocs(); //get all Docs from DB	
 		
-		double d = 0.85;
-		int n = docs.size();
-		double rank = 1/n;
-		 //for test
+		double n = docs.size();
+		double initialRank = ((double)1) / n;
+		List<Double> ranks = new ArrayList<Double>();
+		ranks.add(initialRank);
+		//make all the pages rank 1/n at initial stage
 		for(Doc doc: docs)
 		{
-//			doc.getPageRankings().add(rank);
-
-			double testRank = Math.random();
-			System.out.println(testRank); 
-			if(doc.getPageRankings() == null)
-				doc.setPageRankings(new ArrayList<Double>());
-			doc.getPageRankings().add(testRank);
-			//50 is the maximum and the 1 is our minimum 
+			doc.setPageRankings(ranks);
 			docDao.saveDoc(doc);
 		}
 		
-//		if (entry.getValue().getP().getInlinks()!= null)
-//		{
-//			ArrayList<String> inrank = new ArrayList<String>();
-//			
-//			inrank = entry.getValue().getP().getInlinks();
-//			
-//			for (String s : inrank)
-//			{
-//				
-//				
-//				rank = toRank.get(s).getRank()/toRank.get(s).getOutgo();
-//				
-//				System.out.println("rank "+rank);
-//				
-//				sum = sum + rank;
-//			}
-//			System.out.println("sum "+sum);
-//			
-//			rank=PR(N,sum);
-//			System.out.println("Calculated : "+rank);
-//			
-//			entry.getValue().setCurr(rank);
-//		}
-//		else
-//		{
-//			entry.getValue().setCurr(entry.getValue().getRank());
-//		}
+		docs = docDao.getAllDocs();
 		
+		//do next 10 iteration and save ranking of each page
+		//stop saving at iteration if the value is equal to previous iteration
+		for(int i=1 ; i<=10; i++)
+		{
+			for(Doc doc: docs)
+			{
+				//If already redundant ranking value found in more than 1 iteration
+//				if(doc.getRankingIterationTimae() > doc.getPageRankings().size()) 
+//				{
+//					System.out.println("Already repeated ranking found for Doc: " + doc.getUrl());
+//					continue;
+//				}
+					
+				double lastRank = doc.getPageRankings().get( doc.getPageRankings().size()-1 );
+				double sum = 0;
+				if(doc.getIncomingDocsStr() != null )
+				{
+					if(doc.getIncomingDocsStr().size() != 0)
+					{
+						System.out.println("No incoming for Doc: " + doc.getUrl() + " found.");
+						for(String incomingUrl: doc.getIncomingDocsStr())
+						{
+							Doc incomingDoc = docDao.getDocByUrl(incomingUrl);
+							sum = sum + incomingDoc.getPageRankings()
+								.get( incomingDoc.getPageRankings().size()-1 )
+								/ incomingDoc.getOutgoingDocsStr().size();
+							System.out.println("Sum for Doc: " + doc.getUrl() + " = " + sum);
+						}
+					}
+				}
+				else
+					System.out.println("Incoming of Doc: " + doc.getUrl() + "is NULL !!!");
+				
+				double newRank = ( ((double)1) - Value.LAMBDA / ((double)5) ) + ( Value.LAMBDA * sum);
+				if(lastRank != newRank)
+				{
+					System.out.println("Iteration: " + i + " page ranking "+ newRank +" for Doc: " + doc.getUrl() + "added." );
+					doc.getPageRankings().add( newRank );
+				}
+				else
+					System.out.println("Iteration: " + i + " Doc: " + doc.getUrl() +  " old and New Page ranking are same:  "+ lastRank +" = " + newRank);
+				
+				doc.setRankingIterationTimae(i);
+				docDao.saveDoc(doc);
+			}
+		}	
+		
+		//display some sample page ranking
+		docs = docDao.getAllDocs();
+		System.out.println(" ****************** Sample Page Ranking *********************** ");
+		for(Doc doc : docs)
+		{
+			if(doc.getIncomingDocsStr() == null)
+				System.out.println("INCOMING LINK IS NULL !!!");
+			else if(doc.getIncomingDocsStr().size() > 0)
+				System.out.println("Doc: " +doc.getUrl()+ " Rankins: " + doc.getPageRankings());
+		}
 		
 	}
-
 }
