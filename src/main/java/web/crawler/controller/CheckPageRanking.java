@@ -16,6 +16,7 @@ public class CheckPageRanking {
 		docs = docDao.getAllDocs();
 		System.out.println(" ****************** Sample Page Ranking *********************** ");
 		Doc docWithMaxOutgoing = docs.get(0);
+		Doc docWithMaxRanks = docs.get(0);
 		for(Doc doc : docs)
 		{
 			if(doc.getIncomingDocsStr() == null)
@@ -27,6 +28,9 @@ public class CheckPageRanking {
 				count++;
 				System.out.println("Incoming Size: " +doc.getIncomingDocsStr().size()+ " Rankins: " + doc.getPageRankings());
 			}
+			
+			if( docWithMaxRanks.getPageRankings().size() < doc.getPageRankings().size() )
+				docWithMaxRanks = doc;
 		}
 		
 		System.out.println("Total Docs: "+docs.size() + " | Toatal # Docs with outgoings: " + count);
@@ -38,6 +42,9 @@ public class CheckPageRanking {
 		for(double d : docWithMaxOutgoing.getPageRankings())
 			System.out.println(d);
 		
+		System.out.println("Doc with maximum number of rankings: url = " + docWithMaxRanks.getUrl() );
+		for(double d : docWithMaxRanks.getPageRankings())
+			System.out.println(d);
 
 	}
 

@@ -46,7 +46,7 @@ public class PageRanking {
 		
 		//do next 10 iteration and save ranking of each page
 		//stop saving at iteration if the value is equal to previous iteration
-		for(int i=1 ; i<=10; i++)
+		for(int i=1 ; i<=6; i++)
 		{
 			for(Doc doc: docs)
 			{
@@ -77,11 +77,11 @@ public class PageRanking {
 				else
 					System.out.println("Incoming of Doc: " + doc.getUrl() + "is NULL !!!");
 				
-				double newRank = ( ((double)1) - Value.LAMBDA / ((double)5) ) + ( Value.LAMBDA * sum);
+				double newRank = (( ((double)1) - Value.LAMBDA / ((double)5) ) + ( Value.LAMBDA * sum)) * Value.SCALER;
 				if(lastRank != newRank)
 				{
 					System.out.println("Iteration: " + i + " page ranking "+ newRank +" for Doc: " + doc.getUrl() + "added." );
-					doc.getPageRankings().add( newRank );
+					doc.getPageRankings().add(newRank);
 				}
 				else
 					System.out.println("Iteration: " + i + " Doc: " + doc.getUrl() +  " old and New Page ranking are same:  "+ lastRank +" = " + newRank);
