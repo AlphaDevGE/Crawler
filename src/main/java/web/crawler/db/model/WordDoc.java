@@ -61,6 +61,8 @@ public class WordDoc {
 	private double score;
 	private Doc doc;//the source Doc that is 
 	private boolean inTitle;
+	private String docLocation;
+	
 	public WordDoc(){ super(); }
 	
 	public WordDoc(String docHash, String term, double tf, double idf, double tfIdf, List<Integer> postitions,
@@ -148,14 +150,20 @@ public class WordDoc {
 		this.doc = doc;
 	}
 	
-	
-	
 	public boolean isInTitle() {
 		return inTitle;
 	}
 
 	public void setInTitle(boolean inTitle) {
 		this.inTitle = inTitle;
+	}
+	
+	public String getDocLocation() {
+		return docLocation;
+	}
+
+	public void setDocLocation(String docLocation) {
+		this.docLocation = docLocation;
 	}
 
 	public String toString() {

@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,34 +12,30 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 
 import web.crawler.db.dao.IndexDao;
-import web.crawler.db.dao.UrlDao;
 import web.crawler.db.model.Index;
-import web.crawler.db.model.Url;
+import web.crawler.db.model.ResultBean;
 
-
-@WebServlet("/index.html")
-public class Search extends HttpServlet {
+/**
+ * Servlet implementation class SearchResult
+ */
+public class SearchResult extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	IndexDao indexDao = new IndexDao();
        
-	private IndexDao indexDao = new IndexDao();
-
-    public Search() {
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public SearchResult() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException 
-	{
-		System.out.println("Search Servlet: GET");
-		
-    	RequestDispatcher dis = request.getRequestDispatcher("/index.jsp");
-    	dis.forward(request, response);
-		
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException 
-	{
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("Search result GET");
 		int numberOfTermResult = 7;
 		System.out.println("Search Servlet: POST");
 		
@@ -58,6 +52,7 @@ public class Search extends HttpServlet {
 		term = splitTerm[splitTerm.length-1];
 		
 		List<Index> indexes = indexDao.getIndexBySimilarTerm(term);
+		List<ResultBean> items = new ArrayList<ResultBean>();
 		
 		for(Index i: indexes)
 		{
@@ -78,7 +73,20 @@ public class Search extends HttpServlet {
 		}
 		String searchList = new JSONArray(strList).toString();
 		System.out.println(searchList);
+		
+		getServletContext().setAttribute("items", items);
+		
+		response.sendRedirect("Admin");
 		response.getWriter().write(searchList);
 		
 	}
+		
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
 }

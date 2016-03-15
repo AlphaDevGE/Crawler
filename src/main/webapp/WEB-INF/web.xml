@@ -5,6 +5,17 @@
 	id="WebApp_ID" version="3.0">
 
 	<display-name>Crawler</display-name>
+	<servlet>
+		<description>
+		</description>
+		<display-name>SearchResult</display-name>
+		<servlet-name>SearchResult</servlet-name>
+		<servlet-class>web.crawler.servlet.SearchResult</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SearchResult</servlet-name>
+		<url-pattern>/SearchResult</url-pattern>
+	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
