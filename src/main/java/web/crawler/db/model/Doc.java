@@ -46,6 +46,7 @@ public class Doc {
 	private Set<Address> incomingAddresses;
 	private String parentStr;
 	private List<Double> pageRankings;
+	private int rankingIterationTime;
 	
 	public Doc(){}
 
@@ -65,6 +66,7 @@ public class Doc {
 		this.outgoingAddresses =  new HashSet<Address>();
 		this.incomingAddresses =  new HashSet<Address>();
 		this.parentStr = parentStr;
+		this.rankingIterationTime = 0;
 	}
 		
 	public String getId() {
@@ -187,6 +189,14 @@ public class Doc {
 		this.pageRankings = pageRankings;
 	}
 
+	public int getRankingIterationTimae() {
+		return rankingIterationTime;
+	}
+
+	public void setRankingIterationTimae(int rankingIterationTime) {
+		this.rankingIterationTime = rankingIterationTime;
+	}
+
 	public String toString() {
 		String str = String.format(
                 "'Doc':{\n"
@@ -198,6 +208,7 @@ public class Doc {
               + "		'outgoingDocsStr': '%s',\n"
               + "		'incomingDocsStr': '%s',\n"
               + "		'pageRankings': '%s',\n"
+              + "		'rankingIterationTimae': '%s',\n"
               + "		'title': '%s',\n"
               + "		'parent': '%s',\n"
               + "		'outgoingUrls': '%s',\n"
@@ -205,7 +216,7 @@ public class Doc {
               + "		'metadata': '%s',\n"
               + "		},\n",
                 id, url, visitedDate, hash, location,outgoingDocsStr, 
-                incomingDocsStr, pageRankings, title, parentStr, header, metadata
+                incomingDocsStr, pageRankings, rankingIterationTime, title, parentStr, header, metadata
                 );
 		return str;
 	}

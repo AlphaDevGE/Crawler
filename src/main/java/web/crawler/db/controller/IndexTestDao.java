@@ -5,11 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import web.crawler.db.dao.IndexDao;
-import web.crawler.db.dao.UrlDao;
 import web.crawler.db.dao.WordDocDao;
-import web.crawler.db.model.Doc;
 import web.crawler.db.model.Index;
-import web.crawler.db.model.Url;
 import web.crawler.db.model.WordDoc;
 
 public class IndexTestDao {
@@ -45,7 +42,7 @@ public class IndexTestDao {
 		indexDao.saveIndex(i3);
 		
 		// test data from Db
-		System.out.println("Index found using getUrlBySimilarTerm : " + indexDao.getUrlBySimilarTerm("d").get(0).getTerm());
+		System.out.println("Index found using getUrlBySimilarTerm : " + indexDao.getIndexBySimilarTerm("d").get(0).getTerm());
 		
 		//get the Url object from DB using url String 
 //		System.out.println(url);

@@ -15,7 +15,7 @@ public class IndexDao {
 	private ApplicationContext ctx = new AnnotationConfigApplicationContext(IndexConfig.class);
 	MongoOperations mongoOperation = (MongoOperations) ctx.getBean("mongoTemplate");
 	
-	public List<Index> getUrlBySimilarTerm(String term){
+	public List<Index> getIndexBySimilarTerm(String term){
 		Query findQuery = new Query();
 		findQuery.addCriteria(Criteria.where("term").regex(term+".*"));
 		List<Index> indexes = mongoOperation.find(findQuery, Index.class, DBTable.INDEX);
@@ -23,7 +23,7 @@ public class IndexDao {
 		return indexes;
 	}
 	
-	public Index getUrlByTerm(String term){
+	public Index getIndexByTerm(String term){
 		Query findQuery = new Query();
 		findQuery.addCriteria(Criteria.where("term").is(term));
 		Index dbIndex = mongoOperation.findOne(findQuery, Index.class, DBTable.INDEX);

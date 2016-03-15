@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 
+import web.crawler.db.dao.IndexDao;
 import web.crawler.db.dao.UrlDao;
+import web.crawler.db.model.Index;
 import web.crawler.db.model.Url;
 
 
@@ -21,7 +23,7 @@ import web.crawler.db.model.Url;
 public class Search extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	private UrlDao urlDao = new UrlDao();
+	private IndexDao indexDao = new IndexDao();
 
     public Search() {
         super();
@@ -46,21 +48,21 @@ public class Search extends HttpServlet {
 		String term = request.getParameter("term");
 
 		
-		List<Url> urls = urlDao.getUrlByTerm(term);
+		List<Index> indexes = indexDao.getIndexBySimilarTerm(term);
 		
-		for(Url u: urls)
+		for(Index i: indexes)
 		{
-			System.out.println(u.getUrl());
+			System.out.println(i.getTerm());
 		}
-		System.out.println(urls.size() + " URLs found...");
+		System.out.println(indexes.size() + " URLs found...");
 		
 		
 		List<String> strList = new ArrayList<String>();
 
 		int count = 0;
-		for(Url u : urls)
+		for(Index i : indexes)
 		{
-			strList.add(u.getUrl().replaceAll("/", "") );
+			strList.add(i.getTerm());
 			count++;
 			if(count >= numberOfTermResult )
 				break;
