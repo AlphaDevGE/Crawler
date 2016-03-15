@@ -27,8 +27,8 @@ public class IndexTestDao {
 		list.add(111);
 		//String docHash, String term, double tf, double idf, double tfIdf, List<Integer> postitions,
 		//double score, Doc doc
-		WordDoc wd1 = new WordDoc("111111", "cat", 1.25, 1.1, 1.50, list, 1, null);
-		WordDoc wd2 = new WordDoc("222222", "dog", 2.25, 2.1, 2.50, list, 2, null);
+		WordDoc wd1 = new WordDoc("111111", "cat", 1.25, 1.1, 1.50, list, 1, null,false);
+		WordDoc wd2 = new WordDoc("222222", "dog", 2.25, 2.1, 2.50, list, 2, null,true);
 		
 		Index i1 = new Index("cat", new ArrayList<WordDoc>());
 		i1.addWordDoc(wd1);

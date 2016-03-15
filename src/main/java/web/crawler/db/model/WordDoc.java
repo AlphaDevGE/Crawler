@@ -60,11 +60,11 @@ public class WordDoc {
 	private List<Integer> postitions;
 	private double score;
 	private Doc doc;//the source Doc that is 
-	
+	private boolean inTitle;
 	public WordDoc(){ super(); }
 	
 	public WordDoc(String docHash, String term, double tf, double idf, double tfIdf, List<Integer> postitions,
-			double score, Doc doc) {
+			double score, Doc doc,boolean inTitle) {
 		super();
 		this.docHash = docHash;
 		this.term = term.toLowerCase();
@@ -74,6 +74,7 @@ public class WordDoc {
 		this.postitions = postitions;
 		this.score = score;
 		this.doc = doc;
+		this.inTitle=inTitle;
 	}
 
 	public String getId() {
@@ -147,6 +148,16 @@ public class WordDoc {
 		this.doc = doc;
 	}
 	
+	
+	
+	public boolean isInTitle() {
+		return inTitle;
+	}
+
+	public void setInTitle(boolean inTitle) {
+		this.inTitle = inTitle;
+	}
+
 	public String toString() {
 		String str = String.format(
                 "'WordDoc':{\n"

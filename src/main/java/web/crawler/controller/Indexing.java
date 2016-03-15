@@ -1,5 +1,6 @@
 package web.crawler.controller;
 
+import java.awt.TextField;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import org.apache.lucene.analysis.charfilter.HTMLStripCharFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -27,9 +29,12 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
+import web.crawler.db.controller.UrlAppDao;
+import web.crawler.db.dao.DocDao;
 import web.crawler.db.dao.IndexDao;
 import web.crawler.db.dao.UrlDao;
 import web.crawler.db.dao.WordDocDao;
+import web.crawler.db.model.Doc;
 import web.crawler.db.model.Index;
 import web.crawler.db.model.WordDoc;
 
@@ -42,11 +47,12 @@ public class Indexing {
 			throws IOException {
 		TermFreqVector[] tfv = reader.getTermFreqVectors(docno);
 		String[] arr = tfv[0].getTerms();
-
+		
 		return arr.length;
 	}
 	
 	 static void walk(String path,IndexWriter writer) throws IOException {
+		DocDao docDao=new DocDao();
 		 Version version = Version.LUCENE_36;
 		 Analyzer an = new StandardAnalyzer(version);
 	        File root = new File( path );
@@ -62,15 +68,18 @@ public class Indexing {
 	            else {
 
 	    			String filename=f.getName();
-	    			System.out.println(filename);
+	    			/*System.out.println(filename);*/
 	    			Document doc = new Document();
 	    			Reader r = new FileReader(f);
 	    			HTMLStripCharFilter filter = new HTMLStripCharFilter(
 	    					CharReader.get(new FileReader(f)));
 	    			TokenStream ts = an.tokenStream("html", filter);
 	    			doc.add(new Field("html", ts, Field.TermVector.WITH_POSITIONS));
+	    			//read from the doc dao to get the title of the page
+	    			Doc currentDoc=docDao.getDocByUrl(filename);
+	    			String title=currentDoc.getTitle();
 	    			doc.add(new Field("path", f.getAbsolutePath(), Field.Store.YES, Field.Index.ANALYZED)); 
-
+	    			doc.add(new Field("title",title,Store.YES,Field.Index.ANALYZED ));
 
 	    			// Just checking what is in thee document
 	    			writer.addDocument(doc);
@@ -84,7 +93,8 @@ public class Indexing {
 	public static void main(String sr[]) throws IOException {
 		IndexDao indexDao=new IndexDao();
 		Version version = Version.LUCENE_36;
-		 Analyzer an = new StandardAnalyzer(version);
+		Analyzer an = new StandardAnalyzer(version);
+		WordDocDao wdDao = new WordDocDao();
 		
 		 boolean create = true;
 
@@ -104,67 +114,56 @@ public class Indexing {
 		walk("D:/en",writer);
 		writer.close();
 
-		// Apply Stripper and StopWord Removal and Stemmer
-
-		/*
-		 * HTMLStripCharFilter filter = new HTMLStripCharFilter(
-		 * CharReader.get(new FileReader(fList[0])));
-		 */
-		
-		/*
-		 * an.tokenStream(fieldName, reader) ts=new PorterStemFilter(filter);
-		 */
-
-		// Indexing code
-		
-
-
-		/*for (File f : fList) {
-			String filename=f.getName();
-			Document doc = new Document();
-			Reader r = new FileReader(f);
-			HTMLStripCharFilter filter = new HTMLStripCharFilter(
-					CharReader.get(new FileReader(f)));
-			TokenStream ts = an.tokenStream("html", filter);
-			doc.add(new Field("html", ts, Field.TermVector.WITH_POSITIONS));
-
-			// Just checking what is in thee document
-			writer.addDocument(doc);
-
-		}*/
 		
 		File indexDirectory = new File("D:/webcrawler/Indexing");
 
 		// Reader
 		IndexReader reader = IndexReader.open(FSDirectory.open(indexDirectory));
-		System.out.println("No of document" + reader.numDocs());
-		System.out.println("Enumeration of all terms in the index by reader.terms()");
+		/*System.out.println("No of document" + reader.numDocs());
+		System.out.println("Enumeration of all terms in the index by reader.terms()");*/
 		TermEnum allTerms = reader.terms();
 		DefaultSimilarity simi = new DefaultSimilarity();
-
+		
+		DocDao docDao = new DocDao();
 		while (allTerms.next()) {
 			List<WordDoc> wordDoc=new ArrayList<WordDoc>();
 			String term = (allTerms.term().text());
 			int documentFrequency = reader.docFreq(allTerms.term());
 			TermPositions data = reader.termPositions(allTerms.term());
+			
 			HashMap<String, Double> tfidf = new HashMap<String, Double>();
 			String output = term + " ==> ";
 			output += ("This term is appearing in " + documentFrequency + " documents");
-			String apnd = "< ";
+			
 			while (data.next()) {
+				System.out.println("Entering the loop");
 				WordDoc wd=new WordDoc();
+				
+				
 				int documentNo = (data.doc());
 				Document doc=reader.document(documentNo);
 				String documentLocation=doc.get("path");
+				String title=doc.get("title");
+				//get the relevant Doc object from DB
+				Doc thisDoc = docDao.getDocByPath(documentLocation);
+				if(thisDoc == null)
+					System.out.println("Doc Not found in DB !!!!!!!!! ");
+				wd.setDoc(thisDoc);
+				
+				if(title.contains(term)){
+					wd.setInTitle(true);
+				}
 				wd.setDocHash(documentLocation);
 				int termsInDoc = getNoOfTermsInDoc(reader, documentNo);
 				int appearanceTime=data.freq();
 				
-				double tf = 1 + Math.log10(data.freq());
-				wd.setTf(tf);
+				System.out.println("***********************Total no of Terms in document "+documentLocation+" is "+termsInDoc);
+				double tf = (data.freq());
+				double normalizedTf=tf/termsInDoc;
+				wd.setTf(normalizedTf);
 				double idf = simi.idf(documentFrequency, reader.numDocs());
 				wd.setIdf(idf);
-				double tfidfscore = tf * idf;
+				double tfidfscore = normalizedTf* idf;
 				wd.setTfIdf(tfidfscore);
 				tfidf.put("tfidf", tfidfscore);
 				
@@ -173,17 +172,17 @@ public class Indexing {
 					positionsList.add(data.nextPosition());
 				}
 				wd.setPostitions(positionsList);
-				/* System.out.println(tfidf); */
-				apnd += documentNo + " " + tf ;
-				wordDoc.add(wd);
+				wd.setTerm(term);
+				wdDao.saveWordDoc(wd);
 				
-				
+//				wordDoc.add(wd);
+				wordDoc.add(wdDao.getWordDocByDocHash(wd.getDocHash()));
 			}
-			Index indx=new Index(term,wordDoc);
+			Index indx=new Index(term, wordDoc);
 			indexDao.saveIndex(indx);
-			System.out.println(output);
+			/*System.out.println(output);
 			System.out.println(apnd);
-
+*/
 		}
 
 	}
