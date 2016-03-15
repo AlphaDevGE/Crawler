@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -23,6 +26,7 @@ import org.apache.lucene.util.Version;
 
 import web.crawler.db.dao.DocDao;
 import web.crawler.db.dao.IndexDao;
+import web.crawler.db.dao.WordDocDao;
 import web.crawler.db.model.Doc;
 import web.crawler.db.model.Index;
 import web.crawler.db.model.WordDoc;
@@ -72,11 +76,16 @@ public class Searching {
 			Doc currentDoc = docDao.getDocByPath(path);
 			// use doc dao to get this document
 			List<Double> pageRankList = currentDoc.getPageRankings();
+			if(pageRankList==null)
+				continue;
 			int size = pageRankList.size();
 			double scoreToChange = pageRankList.get(size - 1);
+			System.out.println("Previous Score: "+scoreToChange);
+			
 			scoreToChange += 0.10;
+			System.out.println("score after change: "+scoreToChange);
 			currentDoc.setPageRankings(pageRankList);
-			docDao.saveDoc(currentDoc);
+			docDao.saveDoc(currentDoc);	
 
 			// retrieve the doc and increase the ranking and save it in the
 			// database
@@ -172,29 +181,38 @@ public class Searching {
 	}
 */
 	
-	public static void singleTermSearch(String term){
+	public static List<String> singleTermSearch(String term){
+		WordDocDao wddao=new WordDocDao();
 		Index index=indexDao.getIndexByTerm(term);
 		List<WordDoc> wordDocList=index.getDocuments();
-		List<Double> unsortedList=new ArrayList<Double>();
+		
+		TreeMap<Double, String> treemap = new TreeMap<Double, String>();
 		for(WordDoc wd:wordDocList){
 			double score=wd.getScore();
-			unsortedList.add(score);
+			treemap.put(score, wd.getDocHash());
 		}
-		Collections.sort(unsortedList,Collections.reverseOrder());
-		System.out.println("ArrayList in descending order:");
-		   for(Double str: unsortedList){
-				System.out.println(str);
-			}
-
+		TreeMap<Double,String> newMap=new TreeMap(treemap.descendingMap());
+		List<String> resultsOfPath=new ArrayList<String>();
 		
+		for(Map.Entry<Double,String> entry : newMap.entrySet()) {
+			  double key = entry.getKey();
+			  String value= entry.getValue();
+			  resultsOfPath.add(value);
+			  System.out.println(key + " => " + value);
+			}
+		return resultsOfPath;
 	}
 
 	public static void main(String sr[]) throws IOException, ParseException {
-		StringTokenizer st = new StringTokenizer("this is a test");
+		StringTokenizer st = new StringTokenizer("donalds");
+		List<String> results = null;
 	    if(st.countTokens()>1){
-	    	searchIndexWithQueryParser("query");
+	    	searchIndexWithQueryParser("mc donalds");
 	    }else
-	    	singleTermSearch("query");
+	    	results=singleTermSearch("sachdev");
+	    	for(String fileLocation:results){
+	    		System.out.println(fileLocation);
+	    	}
 		
 	}
 

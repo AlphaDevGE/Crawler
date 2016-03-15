@@ -29,6 +29,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
+import web.crawler.constant.Value;
 import web.crawler.db.controller.UrlAppDao;
 import web.crawler.db.dao.DocDao;
 import web.crawler.db.dao.IndexDao;
@@ -63,7 +64,7 @@ public class Indexing {
 	        for (File f:list ) {
 	            if (f.isDirectory() ) {
 	            	String absPath = f.getAbsolutePath();
-	                walk(f.getAbsolutePath(),writer);
+	                walk(absPath,writer);
 	            }
 	            else {
 
@@ -78,8 +79,8 @@ public class Indexing {
 	    			//read from the doc dao to get the title of the page
 	    			Doc currentDoc=docDao.getDocByUrl(filename);
 	    			String title=currentDoc.getTitle();
-	    			doc.add(new Field("path", f.getAbsolutePath(), Field.Store.YES, Field.Index.ANALYZED)); 
-	    			doc.add(new Field("title",title,Store.YES,Field.Index.ANALYZED ));
+	    			doc.add(new Field("path", f.getAbsolutePath(), Field.Store.YES, Field.Index.NO)); 
+	    			doc.add(new Field("title",title,Store.YES,Field.Index.NO));
 
 	    			// Just checking what is in thee document
 	    			writer.addDocument(doc);
@@ -127,12 +128,11 @@ public class Indexing {
 		DocDao docDao = new DocDao();
 		int count=1;
 			while (allTerms.next()) {
-			System.out.println("COUNTER"+count);
+			
 			List<WordDoc> wordDoc=new ArrayList<WordDoc>();
 			String term = (allTerms.term().text());
-			if(indexDao.getIndexByTerm(term)!=null){
-				continue;
-			}
+			
+		
 			int documentFrequency = reader.docFreq(allTerms.term());
 			TermPositions data = reader.termPositions(allTerms.term());
 			
@@ -140,13 +140,9 @@ public class Indexing {
 			String output = term + " ==> ";
 			output += ("This term is appearing in " + documentFrequency + " documents");
 			
-			while (data.next()) {
+			outer: while (data.next()) {
 				//get the word doc for this term and check if wd already exxists
 				
-				
-				
-				
-				System.out.println("Entering the loop");
 				WordDoc wd=new WordDoc();
 				int documentNo = (data.doc());
 				Document doc=reader.document(documentNo);
@@ -157,15 +153,26 @@ public class Indexing {
 				if(thisDoc == null)
 					System.out.println("Doc Not found in DB !!!!!!!!! ");
 				wd.setDoc(thisDoc);
-				
+				List<Double> pageRankingsList=thisDoc.getPageRankings();
+				double latestScore=pageRankingsList.get(pageRankingsList.size()-1);
 				if(title.contains(term)){
 					wd.setInTitle(true);
+				}
+				Index indx=indexDao.getIndexByTerm(term);
+				List<WordDoc> documents = null;
+				if(indx!=null)
+				documents=indx.getDocuments();
+				if(documents!=null)
+				for(WordDoc wdd:documents){
+					if(wdd.getDocHash().equals(documentLocation)){
+						continue outer;
+					}
 				}
 				wd.setDocHash(documentLocation);
 				int termsInDoc = getNoOfTermsInDoc(reader, documentNo);
 				int appearanceTime=data.freq();
 				
-				System.out.println("***********************Total no of Terms in document "+documentLocation+" is "+termsInDoc);
+				//System.out.println("***********************Total no of Terms in document "+documentLocation+" is "+termsInDoc);
 				
 				
 				double tf = (data.freq());
@@ -175,6 +182,9 @@ public class Indexing {
 				wd.setIdf(idf);
 				double tfidfscore = normalizedTf* idf;
 				wd.setTfIdf(tfidfscore);
+				double score= (tfidfscore * Value.TF_IDF_WEIGHT) + (latestScore * Value.LINK_ANALYSIS_WEIGHT);
+				wd.setScore(score*Value.SCORE_SCALER);
+				System.out.println("Scores:"+score);
 				tfidf.put("tfidf", tfidfscore);
 				
 				List<Integer> positionsList=new ArrayList<Integer>();
