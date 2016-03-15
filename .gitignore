@@ -49,3 +49,9 @@ Temporary Items
 /bin/
 *.bin
 src/main/java/web/crawler/model/WebRepository.java
+.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.jdt.core.prefs
+*.bin
+.gradle/2.2.1/taskArtifacts/cache.properties.lock
+*.prefs
+.gradle/2.2.1/taskArtifacts/taskArtifacts.bin

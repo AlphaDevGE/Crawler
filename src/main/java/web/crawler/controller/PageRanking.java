@@ -21,11 +21,6 @@ public class PageRanking {
 		// PR(A) = page ranking which is initially 1/N
 		// C(A) = No. of outgoing links 
 	
-	
-//			N     = number of incoming links to B
-//			PR(A) = PageRank of incoming link A
-//			C(A)  = number of outgoing links from page A
-		
 		System.out.println("Pge Ranking in process...");
 		List<Doc> docs = new ArrayList<Doc>();
 		DocDao docDao = new DocDao();
