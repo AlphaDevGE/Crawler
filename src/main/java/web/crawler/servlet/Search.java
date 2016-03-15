@@ -46,7 +46,7 @@ public class Search extends HttpServlet {
 		System.out.println("Search Servlet: POST");
 		
 		String term = request.getParameter("term");
-
+		
 		
 		List<Index> indexes = indexDao.getIndexBySimilarTerm(term);
 		

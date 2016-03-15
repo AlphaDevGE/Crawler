@@ -3,8 +3,11 @@ package web.crawler.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.StringTokenizer;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -17,6 +20,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+
 import web.crawler.db.dao.DocDao;
 import web.crawler.db.dao.IndexDao;
 import web.crawler.db.model.Doc;
@@ -63,7 +67,7 @@ public class Searching {
 			// documents by some coefficient
 			Document doc = indexSearcher.doc(scoredoc.doc);
 			String path = doc.get("path");
-			
+			System.out.println("Path is :"+path);
 			results.add(doc.get("path"));
 			Doc currentDoc = docDao.getDocByPath(path);
 			// use doc dao to get this document
@@ -101,7 +105,7 @@ public class Searching {
 	//compare it with the docs of results return by lucene and rmeove those which are not return by lucene
 	//sort the results based on score and display results
 	
-	public static List<WordDoc> getWordDocsByTerm(String term){
+	/*public static List<WordDoc> getWordDocsByTerm(String term){
 		
 			Index index=indexDao.getIndexByTerm(term);
 			List<WordDoc> wdList = index.getDocuments();
@@ -166,19 +170,32 @@ public class Searching {
 		}
 		return null;
 	}
+*/
+	
+	public static void singleTermSearch(String term){
+		Index index=indexDao.getIndexByTerm(term);
+		List<WordDoc> wordDocList=index.getDocuments();
+		List<Double> unsortedList=new ArrayList<Double>();
+		for(WordDoc wd:wordDocList){
+			double score=wd.getScore();
+			unsortedList.add(score);
+		}
+		Collections.sort(unsortedList,Collections.reverseOrder());
+		System.out.println("ArrayList in descending order:");
+		   for(Double str: unsortedList){
+				System.out.println(str);
+			}
 
+		
+	}
 
 	public static void main(String sr[]) throws IOException, ParseException {
-		/*HashSet<String> result = searchIndexWithQueryParser("savin");
-		for (String doc : result) {
-			System.out.println(doc);
-		}*/
+		StringTokenizer st = new StringTokenizer("this is a test");
+	    if(st.countTokens()>1){
+	    	searchIndexWithQueryParser("query");
+	    }else
+	    	singleTermSearch("query");
 		
-		doQuery("sachin");
-		
-/*		for(String wd:results){
-			System.out.println(wd);
-		}
-*/	}
+	}
 
 }

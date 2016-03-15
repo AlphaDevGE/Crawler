@@ -125,9 +125,14 @@ public class Indexing {
 		DefaultSimilarity simi = new DefaultSimilarity();
 		
 		DocDao docDao = new DocDao();
-		while (allTerms.next()) {
+		int count=1;
+			while (allTerms.next()) {
+			System.out.println("COUNTER"+count);
 			List<WordDoc> wordDoc=new ArrayList<WordDoc>();
 			String term = (allTerms.term().text());
+			if(indexDao.getIndexByTerm(term)!=null){
+				continue;
+			}
 			int documentFrequency = reader.docFreq(allTerms.term());
 			TermPositions data = reader.termPositions(allTerms.term());
 			
@@ -136,10 +141,13 @@ public class Indexing {
 			output += ("This term is appearing in " + documentFrequency + " documents");
 			
 			while (data.next()) {
+				//get the word doc for this term and check if wd already exxists
+				
+				
+				
+				
 				System.out.println("Entering the loop");
 				WordDoc wd=new WordDoc();
-				
-				
 				int documentNo = (data.doc());
 				Document doc=reader.document(documentNo);
 				String documentLocation=doc.get("path");
@@ -158,6 +166,8 @@ public class Indexing {
 				int appearanceTime=data.freq();
 				
 				System.out.println("***********************Total no of Terms in document "+documentLocation+" is "+termsInDoc);
+				
+				
 				double tf = (data.freq());
 				double normalizedTf=tf/termsInDoc;
 				wd.setTf(normalizedTf);
@@ -180,11 +190,13 @@ public class Indexing {
 			}
 			Index indx=new Index(term, wordDoc);
 			indexDao.saveIndex(indx);
+			
 			/*System.out.println(output);
 			System.out.println(apnd);
-*/
+*/			count++;
 		}
 
 	}
 
 }
+
