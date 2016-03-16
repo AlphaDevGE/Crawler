@@ -36,7 +36,7 @@ public class Searching {
 	static Version version = Version.LUCENE_36;
 	static String queryString = "";
 	static IndexDao indexDao=new IndexDao();
-	static List<ResultBean> searchIndexWithQueryParser(String query)
+	public static List<ResultBean> searchIndexWithQueryParser(String query)
 			throws ParseException, IOException {
 		// if length of query is greater than 2
 		List<ResultBean> finalresults=new ArrayList<ResultBean>();

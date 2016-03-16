@@ -30,13 +30,15 @@
 	</div> -->
 	<div class="container">
 		<img src="search.png" class="center">
-		<form class="form-horizontal col-lg-12">
+		<form class="form-horizontal col-lg-12" action="SearchResult" method='get' >
 
 			<div class="form-group">
 				<div class="ui-widget">
 					<label class="col-lg-1 control-label">Search: </label>
 					<div class="col-lg-10">
 						<input type="text" id="search" name="search" class="form-control" />
+						<input type="submit" id="submit" name="submit" class="form-control" />
+						
 					</div>
 				</div>
 
@@ -48,37 +50,20 @@
 		<table class="table table-striped table-hover">
 			<thead>
 				<tr>
-					<th> ID </th>
 					<th> Description </th>
 					<th> Scoring </th>
 					<th> Doc Path </th>
 				</tr>
 			</thead>
 			<tbody>
+			<c:forEach items="${items}" var="i">
 				<tr>
-					<td>1</td>
-					<td> ..... this is your search result ....</td>
-					<td>Overall: .095 <br/> TF-IDF: 0.75 <br/> PageRanking: .33</td>
-					<td>D:\en\....\fileName.html</td>
+					<td> ${i.description }</td>
+					<td>Overall: ${i.score } <br/> TF-IDF: ${i.tfIdf } <br/> PageRanking: ${i.pageRanking }</td>
+					<td>${i.location }</td>
 				</tr>
-				<tr>
-					<td>2</td>
-					<td>..... this is your search result ....</td>
-					<td>Overall: .095 <br/> TF-IDF: 0.75 <br/> PageRanking: .33</td>
-					<td>D:\en\....\fileName.html</td>
-				</tr>
-								<tr>
-					<td>3</td>
-					<td>..... this is your search result ....</td>
-					<td>Overall: .095 <br/> TF-IDF: 0.75 <br/> PageRanking: .33</td>
-					<td>D:\en\....\fileName.html</td>
-				</tr>
-								<tr>
-					<td>4</td>
-					<td>..... this is your search result ....</td>
-					<td>Overall: .095 <br/> TF-IDF: 0.75 <br/> PageRanking: .33</td>
-					<td>D:\en\....\fileName.html</td>
-				</tr>
+			</c:forEach>
+
 			</tbody>
 		</table>
 		</div>

@@ -4,15 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONArray;
+import org.apache.lucene.queryParser.ParseException;
 
+import web.crawler.controller.Searching;
 import web.crawler.db.dao.IndexDao;
-import web.crawler.db.model.Index;
 import web.crawler.db.model.ResultBean;
 
 /**
@@ -36,48 +37,33 @@ public class SearchResult extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Search result GET");
-		int numberOfTermResult = 7;
-		System.out.println("Search Servlet: POST");
 		
-		String term = request.getParameter("term");
+		String term = request.getParameter("search");
 		String[] splitTerm = term.split(" ");
-		System.out.println("splitterm size: " + splitTerm.length);
-		
-		String sugessionResult = "";
-		for(int i=0; i<splitTerm.length-1; i++)
-			sugessionResult=sugessionResult + splitTerm[i] + " ";
-		
-		System.out.println("sugessionResult: " + sugessionResult);
-			
-		term = splitTerm[splitTerm.length-1];
-		
-		List<Index> indexes = indexDao.getIndexBySimilarTerm(term);
+		Searching searching = new Searching(); 
+
 		List<ResultBean> items = new ArrayList<ResultBean>();
 		
-		for(Index i: indexes)
+		if(splitTerm.length>1)
 		{
-			System.out.println(i.getTerm());
+			try {
+				items = Searching.searchIndexWithQueryParser(term);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		System.out.println(indexes.size() + " URLs found...");
+		else
+			items = Searching.singleTermSearch(term);
 		
+		for(ResultBean r : items)
+			System.out.println(r.getLocation());
 		
-		List<String> strList = new ArrayList<String>();
-
-		int count = 0;
-		for(Index i : indexes)
-		{
-			strList.add( sugessionResult + i.getTerm() );
-			count++;
-			if(count >= numberOfTermResult )
-				break;
-		}
-		String searchList = new JSONArray(strList).toString();
-		System.out.println(searchList);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+		dispatcher.forward(request, response);
+//		getServletContext().setAttribute("items", items);
 		
-		getServletContext().setAttribute("items", items);
-		
-		response.sendRedirect("Admin");
-		response.getWriter().write(searchList);
+//		response.sendRedirect("index.html");
 		
 	}
 		

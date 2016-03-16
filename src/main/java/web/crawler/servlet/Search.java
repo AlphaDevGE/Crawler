@@ -35,7 +35,10 @@ public class Search extends HttpServlet {
 		System.out.println("Search Servlet: GET");
 		
     	RequestDispatcher dis = request.getRequestDispatcher("/index.jsp");
-    	dis.forward(request, response);
+//    	dis.forward(request, response);
+    	
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+		dispatcher.forward(request, response);
 		
 	}
 
