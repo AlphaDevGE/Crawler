@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,6 +17,7 @@
 	rel="stylesheet"
 	integrity="sha384-fUMURLTdEcpeYHly3PAwggI3l2UvdHNg/I+8LRph7hLDcAZm77YfDx3Tjum9d3vK"
 	crossorigin="anonymous">
+
 
 </head>
 <body>
@@ -37,7 +40,7 @@
 					<label class="col-lg-1 control-label">Search: </label>
 					<div class="col-lg-10">
 						<input type="text" id="search" name="search" class="form-control" />
-						<input type="submit" id="submit" name="submit" class="form-control" />
+						<input type="submit" id="submit" name="submit" value="Search" class="col-lg-4" />
 						
 					</div>
 				</div>
@@ -59,7 +62,7 @@
 			<c:forEach items="${items}" var="i">
 				<tr>
 					<td> ${i.description }</td>
-					<td>Overall: ${i.score } <br/> TF-IDF: ${i.tfIdf } <br/> PageRanking: ${i.pageRanking }</td>
+					<td>Overall: ${i.score } <br/> TF-IDF: ${i.tdIdf } <br/> PageRanking: ${i.pageRanking }</td>
 					<td>${i.location }</td>
 				</tr>
 			</c:forEach>

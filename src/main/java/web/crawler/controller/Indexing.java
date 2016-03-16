@@ -136,7 +136,7 @@ public class Indexing {
 			int documentFrequency = reader.docFreq(allTerms.term());
 			TermPositions data = reader.termPositions(allTerms.term());
 			
-			HashMap<String, Double> tfidf = new HashMap<String, Double>();
+//			HashMap<String, Double> tfidf = new HashMap<String, Double>();
 			String output = term + " ==> ";
 			output += ("This term is appearing in " + documentFrequency + " documents");
 			
@@ -186,7 +186,7 @@ public class Indexing {
 				double score= (tfidfscore * Value.TF_IDF_WEIGHT) + (latestScore * Value.LINK_ANALYSIS_WEIGHT);
 				wd.setScore(score*Value.SCORE_SCALER);
 				System.out.println("Scores:"+score);
-				tfidf.put("tfidf", tfidfscore);
+//				tfidf.put("tfidf", tfidfscore);
 				
 				List<Integer> positionsList=new ArrayList<Integer>();
 				for (int i = 0; i < data.freq(); i++) {
@@ -196,8 +196,8 @@ public class Indexing {
 				wd.setTerm(term);
 				wdDao.saveWordDoc(wd);
 				
-//				wordDoc.add(wd);
-				wordDoc.add(wdDao.getWordDocByDocHash(wd.getDocHash()));
+				wordDoc.add(wd);
+//				wordDoc.add(wdDao.getWordDocByDocHash(wd.getDocHash()));
 			}
 			Index indx=new Index(term, wordDoc);
 			indexDao.saveIndex(indx);

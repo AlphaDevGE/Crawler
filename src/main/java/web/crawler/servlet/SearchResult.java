@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.lucene.queryParser.ParseException;
 
@@ -38,6 +39,7 @@ public class SearchResult extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Search result GET");
 		
+		HttpSession session = request.getSession(); 
 		String term = request.getParameter("search");
 		String[] splitTerm = term.split(" ");
 		Searching searching = new Searching(); 
@@ -54,14 +56,17 @@ public class SearchResult extends HttpServlet {
 			}
 		}
 		else
-			items = Searching.singleTermSearch(term);
+			items = Searching.singleTermSearch2(term);
 		
 		for(ResultBean r : items)
 			System.out.println(r.getLocation());
 		
+//		getServletContext().setAttribute("items", items);
+		session.setAttribute("items", items);
+		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
 		dispatcher.forward(request, response);
-//		getServletContext().setAttribute("items", items);
+
 		
 //		response.sendRedirect("index.html");
 		

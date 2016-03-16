@@ -25,7 +25,7 @@ public class IndexDao {
 	
 	public Index getIndexByTerm(String term){
 		Query findQuery = new Query();
-		findQuery.addCriteria(Criteria.where("term").is(term));
+		findQuery.addCriteria(Criteria.where("term").is(term.toLowerCase()));
 		Index dbIndex = mongoOperation.findOne(findQuery, Index.class, DBTable.INDEX);
 		
 		return dbIndex;

@@ -24,6 +24,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
+import web.crawler.constant.Value;
 import web.crawler.db.dao.DocDao;
 import web.crawler.db.dao.IndexDao;
 import web.crawler.db.dao.WordDocDao;
@@ -35,16 +36,15 @@ import web.crawler.db.model.WordDoc;
 public class Searching {
 	static Version version = Version.LUCENE_36;
 	static String queryString = "";
-	static IndexDao indexDao=new IndexDao();
-	public static List<ResultBean> searchIndexWithQueryParser(String query)
-			throws ParseException, IOException {
+	static IndexDao indexDao = new IndexDao();
+
+	public static List<ResultBean> searchIndexWithQueryParser(String query) throws ParseException, IOException {
 		// if length of query is greater than 2
-		List<ResultBean> finalresults=new ArrayList<ResultBean>();
+		List<ResultBean> finalresults = new ArrayList<ResultBean>();
 		if (query.length() > 1) {
 			String[] queryTerms = query.split(" ");
 			for (String q : queryTerms) {
-				if (q.equalsIgnoreCase("and") || q.equalsIgnoreCase("or")
-						|| q.equalsIgnoreCase("not")) {
+				if (q.equalsIgnoreCase("and") || q.equalsIgnoreCase("or") || q.equalsIgnoreCase("not")) {
 					queryString += " " + q.toUpperCase();
 				} else {
 					queryString += " " + q;
@@ -61,52 +61,52 @@ public class Searching {
 		// Search within title
 		QueryParser titleParser = new QueryParser(version, "title", an);
 		Query q = titleParser.parse(queryString);
-		System.out.println("parsed query is"+q.toString());
+		System.out.println("parsed query is" + q.toString());
 		TopDocs titleDocs = indexSearcher.search(q, 20);
 		System.out.println("Total Hits in Title :" + titleDocs.totalHits);
 		ScoreDoc[] scoreDocArray = titleDocs.scoreDocs;
 		HashSet<String> results = new HashSet<String>();
 		// for all the documents get the score and multiply it by some
 		// coefficient to give it more importance
-		
+
 		for (ScoreDoc scoredoc : scoreDocArray) {
 			// Retrieve the matched document and increase the rank of the
 			// documents by some coefficient
-			ResultBean rs=new ResultBean();
+			ResultBean rs = new ResultBean();
 			Document doc = indexSearcher.doc(scoredoc.doc);
 			String path = doc.get("path");
 			rs.setDescription(doc.get("title"));
 			rs.setLocation(path);
-			List<Double> pr=docDao.getDocByPath(path).getPageRankings();
-			rs.setPageRanking(pr.get(pr.size()-1));
-			System.out.println("Path is :"+path);
+			List<Double> pr = docDao.getDocByPath(path).getPageRankings();
+			rs.setPageRanking(pr.get(pr.size() - 1));
+			System.out.println("Path is :" + path);
 			results.add(doc.get("path"));
 			Doc currentDoc = docDao.getDocByPath(path);
 			// use doc dao to get this document
 			List<Double> pageRankList = currentDoc.getPageRankings();
-			if(pageRankList==null)
+			if (pageRankList == null)
 				continue;
 			int size = pageRankList.size();
 			double scoreToChange = pageRankList.get(size - 1);
-			System.out.println("Previous Score: "+scoreToChange);
-			
+			System.out.println("Previous Score: " + scoreToChange);
+
 			scoreToChange += 0.10;
-			System.out.println("score after change: "+scoreToChange);
+			System.out.println("score after change: " + scoreToChange);
 			currentDoc.setPageRankings(pageRankList);
-			docDao.saveDoc(currentDoc);	
+			docDao.saveDoc(currentDoc);
 
 			// retrieve the doc and increase the ranking and save it in the
 			// database
 			finalresults.add(rs);
-		}	
+		}
 
 		// search within content
 		QueryParser contentParser = new QueryParser(version, "html", an);
-		Query qString=contentParser.parse(queryString);
+		Query qString = contentParser.parse(queryString);
 		System.out.println(qString.toString());
 		TopDocs contentDocs = indexSearcher.search(qString, 20);
-		
-		 System.out.println("Total Hits in Contents: "+contentDocs.totalHits);
+
+		System.out.println("Total Hits in Contents: " + contentDocs.totalHits);
 		ScoreDoc[] scoreDocArray2 = contentDocs.scoreDocs;
 		for (ScoreDoc scoreDoc : scoreDocArray2) {
 			Document doc = indexSearcher.doc(scoreDoc.doc);
@@ -118,125 +118,156 @@ public class Searching {
 	public static void displayQuery(Query query) {
 		System.out.println("Query: " + query.toString());
 	}
-	//for the search queries get all the word docs
-	//compare it with the docs of results return by lucene and rmeove those which are not return by lucene
-	//sort the results based on score and display results
-	
-	/*public static List<WordDoc> getWordDocsByTerm(String term){
-		
-			Index index=indexDao.getIndexByTerm(term);
-			List<WordDoc> wdList = index.getDocuments();
-			System.out.println("list containss "+wdList.size()+" items for :"+term);
-			return wdList;
-	} 
-	
-	public static List<WordDoc> orQuery(String term1,String term2){
-		//for or query take the lists and merge the two list(create a set)
-		
-		List<WordDoc> term1List=getWordDocsByTerm(term1);
-		List<WordDoc> term2List=getWordDocsByTerm(term2);
-		term1List.addAll(term2List);
-		return term1List;
-	}
-	
-	
-	public static List<String> andQuery(String term1,String term2){
-		//for or query take the lists and merge the two list(create a set)
-		System.out.println("And Operation Received :"+term1+" and "+term2);
-		List<WordDoc> term1List=getWordDocsByTerm(term1);
-		List<WordDoc> term2List=getWordDocsByTerm(term2);
-		List<String> path1=new ArrayList<String>();
-		List<String> path2=new ArrayList<String>();
-		for(WordDoc wd:term1List){
-			path1.add(wd.getDocHash());
-		}
-		for(WordDoc wd:term2List){
-			path2.add(wd.getDocHash());
-		}
-		term1List.retainAll(term2List);
-		System.out.println("After retaining the list size is"+term1List.size());
-		path1.retainAll(path2);
-		return path1;
-	}
-	
-	public static List<String> doQuery(String query){
-		//search for And and get the term before and after the AND and call the andQuery
-		System.out.println("My Query IS:"+query);
-		String[] terms=query.split(" ");
-		if(terms.length>1){
-			for(int i=0;i<terms.length;i++){
-				if(terms[i].equalsIgnoreCase("and")){
-					List<String> results=andQuery(terms[i-1],terms[i+1]);
-					return results;
-					
-				}
-				if(terms[i].equalsIgnoreCase("or")){
-					List<String> results=andQuery(terms[i-1],terms[i+1]);
-					return results;
-				}
-			}
-		}else{
-			if(query.length()==1){
-				System.out.println("yes its 1 Term query");
-				Index index=indexDao.getIndexByTerm(query);
-				List<WordDoc> wdList=index.getDocuments();
-				for(WordDoc wd:wdList){
-					System.out.println("tfidf found is:"+wd.getTfIdf());
-				}
-			}
-		}
-		return null;
-	}
-*/
-	
-	public static List<ResultBean> singleTermSearch(String term){
-		WordDocDao wddao=new WordDocDao();
-		DocDao dd=new DocDao();
-		Index index=indexDao.getIndexByTerm(term);
-		List<WordDoc> wordDocList=index.getDocuments();
-		List<ResultBean> results=new ArrayList<ResultBean>();
+	// for the search queries get all the word docs
+	// compare it with the docs of results return by lucene and rmeove those
+	// which are not return by lucene
+	// sort the results based on score and display results
+
+	/*
+	 * public static List<WordDoc> getWordDocsByTerm(String term){
+	 * 
+	 * Index index=indexDao.getIndexByTerm(term); List<WordDoc> wdList =
+	 * index.getDocuments(); System.out.println("list containss "+wdList.size()+
+	 * " items for :"+term); return wdList; }
+	 * 
+	 * public static List<WordDoc> orQuery(String term1,String term2){ //for or
+	 * query take the lists and merge the two list(create a set)
+	 * 
+	 * List<WordDoc> term1List=getWordDocsByTerm(term1); List<WordDoc>
+	 * term2List=getWordDocsByTerm(term2); term1List.addAll(term2List); return
+	 * term1List; }
+	 * 
+	 * 
+	 * public static List<String> andQuery(String term1,String term2){ //for or
+	 * query take the lists and merge the two list(create a set)
+	 * System.out.println("And Operation Received :"+term1+" and "+term2);
+	 * List<WordDoc> term1List=getWordDocsByTerm(term1); List<WordDoc>
+	 * term2List=getWordDocsByTerm(term2); List<String> path1=new
+	 * ArrayList<String>(); List<String> path2=new ArrayList<String>();
+	 * for(WordDoc wd:term1List){ path1.add(wd.getDocHash()); } for(WordDoc
+	 * wd:term2List){ path2.add(wd.getDocHash()); }
+	 * term1List.retainAll(term2List); System.out.println(
+	 * "After retaining the list size is"+term1List.size());
+	 * path1.retainAll(path2); return path1; }
+	 * 
+	 * public static List<String> doQuery(String query){ //search for And and
+	 * get the term before and after the AND and call the andQuery
+	 * System.out.println("My Query IS:"+query); String[] terms=query.split(" "
+	 * ); if(terms.length>1){ for(int i=0;i<terms.length;i++){
+	 * if(terms[i].equalsIgnoreCase("and")){ List<String>
+	 * results=andQuery(terms[i-1],terms[i+1]); return results;
+	 * 
+	 * } if(terms[i].equalsIgnoreCase("or")){ List<String>
+	 * results=andQuery(terms[i-1],terms[i+1]); return results; } } }else{
+	 * if(query.length()==1){ System.out.println("yes its 1 Term query"); Index
+	 * index=indexDao.getIndexByTerm(query); List<WordDoc>
+	 * wdList=index.getDocuments(); for(WordDoc wd:wdList){ System.out.println(
+	 * "tfidf found is:"+wd.getTfIdf()); } } } return null; }
+	 */
+
+	public static List<ResultBean> singleTermSearch(String term) {
+		WordDocDao wddao = new WordDocDao();
+		DocDao dd = new DocDao();
+		Index index = indexDao.getIndexByTerm(term);
+		List<WordDoc> wordDocList = index.getDocuments();
+		List<ResultBean> results = new ArrayList<ResultBean>();
 		TreeMap<Double, String> treemap = new TreeMap<Double, String>();
-		for(WordDoc wd:wordDocList){
-			double score=wd.getScore();
+		
+		for (WordDoc wd : wordDocList) {
+			double score = wd.getScore();
 			treemap.put(score, wd.getDocHash());
 		}
-		TreeMap<Double,String> newMap=new TreeMap(treemap.descendingMap());
-		List<String> resultsOfPath=new ArrayList<String>();
+		TreeMap<Double, String> newMap = new TreeMap(treemap.descendingMap());
+		List<String> resultsOfPath = new ArrayList<String>();
 		
-		for(Map.Entry<Double,String> entry : newMap.entrySet()) {
-			ResultBean rs=new ResultBean();
-			  double key = entry.getKey();
-			  String value= entry.getValue();
-			  rs.setScore(key);
-			  rs.setLocation(value);
-			  for(WordDoc wd:wordDocList){
-				  if(wd.getDocLocation().equals(value)){
-					  rs.setTdIdf(wd.getIdf());
-			 
-				  }
-			  }
-			 Doc doc=dd.getDocByPath(value);
-			rs.setDescription(doc.getTitle());
-			List<Double> pr=doc.getPageRankings();
-			rs.setPageRanking(pr.get(pr.size()-1));
-			 resultsOfPath.add(value);
-			  System.out.println(key + " => " + value);
-			  results.add(rs);
-			  
-			}
+
+		for (Map.Entry<Double, String> entry : newMap.entrySet()) {
+			ResultBean rs = new ResultBean();
+			double key = entry.getKey();
+			String value = entry.getValue();
 			
+			for (WordDoc wd : wordDocList) {
+				if (wd.getDocLocation().equals(value)) {
+					rs.setTdIdf(wd.getIdf());
+
+				}
+			}
+			Doc doc = dd.getDocByPath(value);
+			List<Double> pr = doc.getPageRankings();
+			rs.setDescription(doc.getTitle());
+			rs.setScore(key);
+			rs.setLocation(value);
+			rs.setPageRanking(pr.get(pr.size() - 1));
+			
+			resultsOfPath.add(value);
+			System.out.println(key + " => " + value);
+			results.add(rs);
+
+		}
+		
+
+		
+		
+
 		return results;
 	}
 
+	public static List<ResultBean> singleTermSearch2(String term) {
+		WordDocDao wddao = new WordDocDao();
+		DocDao docDao = new DocDao();
+		Index index = indexDao.getIndexByTerm(term);
+		List<WordDoc> wordDocList = index.getDocuments();
+		
+		System.out.println("wordDocList size: " + wordDocList.size());
+		
+		List<ResultBean> results = new ArrayList<ResultBean>();
+		
+		for(WordDoc w : wordDocList)
+		{
+			Doc dbDoc = docDao.getDocByPath(w.getDocLocation());
+			if(dbDoc == null)
+				System.out.println("Doc path not found in Doc DB !!!!!! ");
+			
+			ResultBean rb = new ResultBean();
+			rb.setDescription(dbDoc.getTitle());
+			rb.setLocation(dbDoc.getLocation());
+			rb.setPageRanking( dbDoc.getPageRankings()
+					.get( dbDoc.getPageRankings().size() - 1 ));
+			rb.setTdIdf(w.getTfIdf());
+			
+			double score= (rb.getTdIdf() * Value.TF_IDF_WEIGHT) + (rb.getPageRanking() * Value.LINK_ANALYSIS_WEIGHT);
+			rb.setScore(score);
+			
+			results.add(rb);
+		}
+		
+		//sort the results here
+		List<ResultBean> resultsSorted = new ArrayList<ResultBean>();
+		
+		for(int i=0; i<results.size()-1 ; i++ )
+		{
+			
+			
+			
+			
+			if(resultsSorted.size() == 20)
+				break;
+		}
+		
+
+		return resultsSorted;
+	}
+
+	
+	
 	public static void main(String sr[]) throws IOException, ParseException {
 		StringTokenizer st = new StringTokenizer("donalds");
 		List<ResultBean> results = null;
-	    if(st.countTokens()>1){
-	    	searchIndexWithQueryParser("mc donalds");
-	    }else
-	    	results=singleTermSearch("sachdev");
-	    	
-		
+		if (st.countTokens() > 1) {
+			searchIndexWithQueryParser("mc donalds");
+		} else
+			results = singleTermSearch("sachdev");
+
 	}
 
 }
