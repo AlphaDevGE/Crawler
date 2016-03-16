@@ -174,7 +174,16 @@ public class Searching {
 		TreeMap<Double, String> treemap = new TreeMap<Double, String>();
 		
 		for (WordDoc wd : wordDocList) {
-			double score = wd.getScore();
+			//require tfidf and latest score from dao
+			//get path first
+			
+			Doc dbDocument=dd.getDocByPath(wd.getDocHash());
+			double tfidf=wd.getTfIdf();
+			List<Double> allRanks=dbDocument.getPageRankings();
+			double pageRank=allRanks.get(allRanks.size()-1);
+			double score=(tfidf* Value.TF_IDF_WEIGHT) + (pageRank* Value.LINK_ANALYSIS_WEIGHT);
+			wd.setScore(score);
+			
 			treemap.put(score, wd.getDocHash());
 		}
 		TreeMap<Double, String> newMap = new TreeMap(treemap.descendingMap());
@@ -188,7 +197,7 @@ public class Searching {
 			
 			for (WordDoc wd : wordDocList) {
 				if (wd.getDocLocation().equals(value)) {
-					rs.setTdIdf(wd.getIdf());
+					rs.setTdIdf(wd.getTfIdf());
 
 				}
 			}
@@ -212,7 +221,7 @@ public class Searching {
 		return results;
 	}
 
-	public static List<ResultBean> singleTermSearch2(String term) {
+	/*public static List<ResultBean> singleTermSearch2(String term) {
 		WordDocDao wddao = new WordDocDao();
 		DocDao docDao = new DocDao();
 		Index index = indexDao.getIndexByTerm(term);
@@ -257,7 +266,7 @@ public class Searching {
 
 		return resultsSorted;
 	}
-
+*/
 	
 	
 	public static void main(String sr[]) throws IOException, ParseException {
@@ -266,7 +275,8 @@ public class Searching {
 		if (st.countTokens() > 1) {
 			searchIndexWithQueryParser("mc donalds");
 		} else
-			results = singleTermSearch("sachdev");
+			results = singleTermSearch("b");
+			System.out.println("RESULTS SIZE :"+results.size());
 
 	}
 

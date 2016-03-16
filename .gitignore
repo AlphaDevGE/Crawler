@@ -55,3 +55,5 @@ src/main/java/web/crawler/model/WebRepository.java
 .gradle/2.2.1/taskArtifacts/cache.properties.lock
 *.prefs
 .gradle/2.2.1/taskArtifacts/taskArtifacts.bin
+src/main/java/web/crawler/controller/Indexing.java
+src/main/java/web/crawler/controller/Searching.java

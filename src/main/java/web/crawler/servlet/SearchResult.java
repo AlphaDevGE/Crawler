@@ -56,7 +56,7 @@ public class SearchResult extends HttpServlet {
 			}
 		}
 		else
-			items = Searching.singleTermSearch2(term);
+			items = Searching.singleTermSearch(term);
 		
 		for(ResultBean r : items)
 			System.out.println(r.getLocation());
