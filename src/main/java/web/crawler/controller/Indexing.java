@@ -152,7 +152,8 @@ public class Indexing {
 				Doc thisDoc = docDao.getDocByPath(documentLocation);
 				if(thisDoc == null)
 					System.out.println("Doc Not found in DB !!!!!!!!! ");
-				wd.setDoc(thisDoc);
+				//wd.setDoc(thisDoc);
+				wd.setDocLocation(documentLocation);
 				List<Double> pageRankingsList=thisDoc.getPageRankings();
 				double latestScore=pageRankingsList.get(pageRankingsList.size()-1);
 				if(title.contains(term)){

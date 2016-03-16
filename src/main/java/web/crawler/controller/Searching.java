@@ -29,15 +29,17 @@ import web.crawler.db.dao.IndexDao;
 import web.crawler.db.dao.WordDocDao;
 import web.crawler.db.model.Doc;
 import web.crawler.db.model.Index;
+import web.crawler.db.model.ResultBean;
 import web.crawler.db.model.WordDoc;
 
 public class Searching {
 	static Version version = Version.LUCENE_36;
 	static String queryString = "";
 	static IndexDao indexDao=new IndexDao();
-	static HashSet<String> searchIndexWithQueryParser(String query)
+	static List<ResultBean> searchIndexWithQueryParser(String query)
 			throws ParseException, IOException {
 		// if length of query is greater than 2
+		List<ResultBean> finalresults=new ArrayList<ResultBean>();
 		if (query.length() > 1) {
 			String[] queryTerms = query.split(" ");
 			for (String q : queryTerms) {
@@ -66,11 +68,17 @@ public class Searching {
 		HashSet<String> results = new HashSet<String>();
 		// for all the documents get the score and multiply it by some
 		// coefficient to give it more importance
+		
 		for (ScoreDoc scoredoc : scoreDocArray) {
 			// Retrieve the matched document and increase the rank of the
 			// documents by some coefficient
+			ResultBean rs=new ResultBean();
 			Document doc = indexSearcher.doc(scoredoc.doc);
 			String path = doc.get("path");
+			rs.setDescription(doc.get("title"));
+			rs.setLocation(path);
+			List<Double> pr=docDao.getDocByPath(path).getPageRankings();
+			rs.setPageRanking(pr.get(pr.size()-1));
 			System.out.println("Path is :"+path);
 			results.add(doc.get("path"));
 			Doc currentDoc = docDao.getDocByPath(path);
@@ -89,8 +97,8 @@ public class Searching {
 
 			// retrieve the doc and increase the ranking and save it in the
 			// database
-
-		}
+			finalresults.add(rs);
+		}	
 
 		// search within content
 		QueryParser contentParser = new QueryParser(version, "html", an);
@@ -104,7 +112,7 @@ public class Searching {
 			Document doc = indexSearcher.doc(scoreDoc.doc);
 			results.add(doc.get("path"));
 		}
-		return results;
+		return finalresults;
 	}
 
 	public static void displayQuery(Query query) {
@@ -181,11 +189,12 @@ public class Searching {
 	}
 */
 	
-	public static List<String> singleTermSearch(String term){
+	public static List<ResultBean> singleTermSearch(String term){
 		WordDocDao wddao=new WordDocDao();
+		DocDao dd=new DocDao();
 		Index index=indexDao.getIndexByTerm(term);
 		List<WordDoc> wordDocList=index.getDocuments();
-		
+		List<ResultBean> results=new ArrayList<ResultBean>();
 		TreeMap<Double, String> treemap = new TreeMap<Double, String>();
 		for(WordDoc wd:wordDocList){
 			double score=wd.getScore();
@@ -195,24 +204,38 @@ public class Searching {
 		List<String> resultsOfPath=new ArrayList<String>();
 		
 		for(Map.Entry<Double,String> entry : newMap.entrySet()) {
+			ResultBean rs=new ResultBean();
 			  double key = entry.getKey();
 			  String value= entry.getValue();
-			  resultsOfPath.add(value);
+			  rs.setScore(key);
+			  rs.setLocation(value);
+			  for(WordDoc wd:wordDocList){
+				  if(wd.getDocLocation().equals(value)){
+					  rs.setTdIdf(wd.getIdf());
+			 
+				  }
+			  }
+			 Doc doc=dd.getDocByPath(value);
+			rs.setDescription(doc.getTitle());
+			List<Double> pr=doc.getPageRankings();
+			rs.setPageRanking(pr.get(pr.size()-1));
+			 resultsOfPath.add(value);
 			  System.out.println(key + " => " + value);
+			  results.add(rs);
+			  
 			}
-		return resultsOfPath;
+			
+		return results;
 	}
 
 	public static void main(String sr[]) throws IOException, ParseException {
 		StringTokenizer st = new StringTokenizer("donalds");
-		List<String> results = null;
+		List<ResultBean> results = null;
 	    if(st.countTokens()>1){
 	    	searchIndexWithQueryParser("mc donalds");
 	    }else
 	    	results=singleTermSearch("sachdev");
-	    	for(String fileLocation:results){
-	    		System.out.println(fileLocation);
-	    	}
+	    	
 		
 	}
 
