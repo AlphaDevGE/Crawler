@@ -35,13 +35,14 @@ import web.crawler.db.model.WordDoc;
 
 public class Searching {
 	static Version version = Version.LUCENE_36;
-	static String queryString = "";
+	
 	static IndexDao indexDao = new IndexDao();
 
 	public static List<ResultBean> searchIndexWithQueryParser(String query) throws ParseException, IOException {
 		// if length of query is greater than 2
+		String queryString = "";
 		List<ResultBean> finalresults = new ArrayList<ResultBean>();
-		if (query.length() > 1) {
+		{
 			String[] queryTerms = query.split(" ");
 			for (String q : queryTerms) {
 				if (q.equalsIgnoreCase("and") || q.equalsIgnoreCase("or") || q.equalsIgnoreCase("not")) {
@@ -109,8 +110,15 @@ public class Searching {
 		System.out.println("Total Hits in Contents: " + contentDocs.totalHits);
 		ScoreDoc[] scoreDocArray2 = contentDocs.scoreDocs;
 		for (ScoreDoc scoreDoc : scoreDocArray2) {
+			ResultBean rs = new ResultBean();
 			Document doc = indexSearcher.doc(scoreDoc.doc);
 			results.add(doc.get("path"));
+			rs.setDescription(doc.get("title"));
+			rs.setLocation(doc.get("path"));
+			List<Double> pr = docDao.getDocByPath(doc.get("path")).getPageRankings();
+			rs.setPageRanking(pr.get(pr.size() - 1));
+			finalresults.add(rs);
+			
 		}
 		return finalresults;
 	}

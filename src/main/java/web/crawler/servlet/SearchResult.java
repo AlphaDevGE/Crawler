@@ -50,6 +50,7 @@ public class SearchResult extends HttpServlet {
 		{
 			try {
 				items = Searching.searchIndexWithQueryParser(term);
+				System.out.println("Boolean found:"+items.size());
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
