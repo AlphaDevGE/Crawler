@@ -79,6 +79,10 @@ public class DocDao {
 		
 	}
 	
+	public void saveDocsList(List<Doc> docs){
+		mongoOperation.insertAll(docs);
+	}
+	
 	public void updateIncommingLink(String url, Set<String> incomingSet)
 	{
 		Query findQuery = new Query();

@@ -81,26 +81,28 @@ public class Index {
 	}
 
 	public void setDocuments(List<WordDoc> documents) {
-		if(documents != null)
-		{
-			for(WordDoc wd: documents)
-			{
-				if( wd.getTerm() == null )
-					wd.setTerm(term);
-				else if(!term.equals(wd.getTerm()))
-				{
-					System.out.println("!!!!! Warning !!!!!");
-					System.out.println("The term: '"+ wd.getTerm() + "' in List<WordDoc> not EQUAL to the term: '" 
-					+ term +"' that is being Indexed.");
-					System.out.println("The term: '"+ wd.getTerm() + "' in List<WordDoc> changed to : '" + term + "'");
-					wd.setTerm(term);
-				}
-			}
-			this.documents = documents;
-		}
-		else
-			System.out.println(" Null cannot be assigned to the List<WordDoc> collection");
 		
+		
+//		if(documents != null)
+//		{
+//			for(WordDoc wd: documents)
+//			{
+//				if( wd.getTerm() == null )
+//					wd.setTerm(term);
+//				else if(!term.equals(wd.getTerm()))
+//				{
+//					System.out.println("!!!!! Warning !!!!!");
+//					System.out.println("The term: '"+ wd.getTerm() + "' in List<WordDoc> not EQUAL to the term: '" 
+//					+ term +"' that is being Indexed.");
+//					System.out.println("The term: '"+ wd.getTerm() + "' in List<WordDoc> changed to : '" + term + "'");
+//					wd.setTerm(term);
+//				}
+//			}
+		this.documents = documents;
+//		}
+//		else
+//			System.out.println(" Null cannot be assigned to the List<WordDoc> collection");
+//		
 	}
 	
 	public String toString() {

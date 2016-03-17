@@ -53,11 +53,11 @@ public class CreateIncomingLinks {
 					//replace the old incomingDocStr with new one
 					outgoingDoc.setIncomingDocsStr(incomings);
 						
-					if(outgoingDoc.getIncomingAddresses() == null)
-					{
-						outgoingDoc.setIncomingAddresses(new HashSet<Address>());
-						System.out.println("*** New Incoming Address HashSet created for outgoing Doc url: " + outgoingDoc.getUrl());
-					}
+//					if(outgoingDoc.getIncomingAddresses() == null)
+//					{
+//						outgoingDoc.setIncomingAddresses(new HashSet<Address>());
+//						System.out.println("*** New Incoming Address HashSet created for outgoing Doc url: " + outgoingDoc.getUrl());
+//					}
 					
 					Address outgoingDocAddress = new Address(
 							outgoingDoc.getUrl(), outgoingDoc.getPath(), outgoingDoc.getOutgoingAddresses().size()); 				

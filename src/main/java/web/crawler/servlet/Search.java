@@ -46,17 +46,17 @@ public class Search extends HttpServlet {
 			throws ServletException, IOException 
 	{
 		int numberOfTermResult = 7;
-		System.out.println("Search Servlet: POST");
+		//System.out.println("Search Servlet: POST");
 		
 		String term = request.getParameter("term");
 		String[] splitTerm = term.split(" ");
-		System.out.println("splitterm size: " + splitTerm.length);
+		//System.out.println("splitterm size: " + splitTerm.length);
 		
 		String sugessionResult = "";
 		for(int i=0; i<splitTerm.length-1; i++)
 			sugessionResult=sugessionResult + splitTerm[i] + " ";
 		
-		System.out.println("sugessionResult: " + sugessionResult);
+		//System.out.println("sugessionResult: " + sugessionResult);
 			
 		term = splitTerm[splitTerm.length-1];
 		
@@ -64,9 +64,9 @@ public class Search extends HttpServlet {
 		
 		for(Index i: indexes)
 		{
-			System.out.println(i.getTerm());
+		//	System.out.println(i.getTerm());
 		}
-		System.out.println(indexes.size() + " URLs found...");
+		//System.out.println(indexes.size() + " URLs found...");
 		
 		
 		List<String> strList = new ArrayList<String>();
@@ -80,7 +80,7 @@ public class Search extends HttpServlet {
 				break;
 		}
 		String searchList = new JSONArray(strList).toString();
-		System.out.println(searchList);
+		//System.out.println(searchList);
 		response.getWriter().write(searchList);
 		
 	}

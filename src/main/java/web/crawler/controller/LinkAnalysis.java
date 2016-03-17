@@ -55,7 +55,7 @@ public class LinkAnalysis {
 			}
 			
 			d1.setIncomingDocsStr(incomings);
-			d1.setIncomingAddresses(incomingAddresses);
+//			d1.setIncomingAddresses(incomingAddresses);
 			d1.setOutgoingAddresses(outgoingAddresses);
 			
 			docDao.saveDoc(d1);

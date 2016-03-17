@@ -42,8 +42,9 @@ public class IndexDao {
 		
 	}
 	
-	public void saveIndex(Index index)
+	public void saveIndex(List<Index> index)
 	{
-		mongoOperation.save(index, DBTable.INDEX);
+		mongoOperation.insertAll(index);
+		
 	}
 }

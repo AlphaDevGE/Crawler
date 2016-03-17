@@ -74,7 +74,9 @@ public class Indexing {
 	    			Reader r = new FileReader(f);
 	    			HTMLStripCharFilter filter = new HTMLStripCharFilter(
 	    					CharReader.get(new FileReader(f)));
+	    			//PatternReplaceFilter prf=new PatternReplaceFilter();
 	    			TokenStream ts = an.tokenStream("html", filter);
+	    			
 	    			doc.add(new Field("html", ts, Field.TermVector.WITH_POSITIONS));
 	    			//read from the doc dao to get the title of the page
 	    			Doc currentDoc=docDao.getDocByUrl(filename);
@@ -200,7 +202,7 @@ public class Indexing {
 //				wordDoc.add(wdDao.getWordDocByDocHash(wd.getDocHash()));
 			}
 			Index indx=new Index(term, wordDoc);
-			indexDao.saveIndex(indx);
+			//indexDao.saveIndex(indx);
 			
 			/*System.out.println(output);
 			System.out.println(apnd);
