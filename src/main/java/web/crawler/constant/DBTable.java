@@ -6,5 +6,7 @@ public class DBTable {
 	public static final String WORD_DOC = "wordDocs";
 	public static final String INDEX = "indexes";
 	public static final String DOC = "doc";
+	public static final String DOCS = "docs";
 	public static final String ADDRESS = "address";
+	 
 }

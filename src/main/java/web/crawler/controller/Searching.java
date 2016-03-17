@@ -90,7 +90,7 @@ public class Searching {
 			int size = pageRankList.size();
 			double scoreToChange = pageRankList.get(size - 1);
 			System.out.println("Previous Score: " + scoreToChange);
-
+			
 			scoreToChange += 0.10;
 			System.out.println("score after change: " + scoreToChange);
 			currentDoc.setPageRankings(pageRankList);
@@ -126,7 +126,7 @@ public class Searching {
 	public static void displayQuery(Query query) {
 		System.out.println("Query: " + query.toString());
 	}
-	// for the search queries get all the word docs
+	 //for the search queries get all the word docs
 	// compare it with the docs of results return by lucene and rmeove those
 	// which are not return by lucene
 	// sort the results based on score and display results
@@ -187,6 +187,7 @@ public class Searching {
 			
 			Doc dbDocument=dd.getDocByPath(wd.getDocHash());
 			double tfidf=wd.getTfIdf();
+			
 			List<Double> allRanks=dbDocument.getPageRankings();
 			double pageRank=allRanks.get(allRanks.size()-1);
 			double score=(tfidf* Value.TF_IDF_WEIGHT) + (pageRank* Value.LINK_ANALYSIS_WEIGHT);
@@ -204,7 +205,7 @@ public class Searching {
 			String value = entry.getValue();
 			
 			for (WordDoc wd : wordDocList) {
-				if (wd.getDocLocation().equals(value)) {
+				if (wd.getDocHash().equals(value)) {
 					rs.setTdIdf(wd.getTfIdf());
 
 				}
