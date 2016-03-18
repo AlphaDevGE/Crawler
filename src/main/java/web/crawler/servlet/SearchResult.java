@@ -79,12 +79,16 @@ public class SearchResult extends HttpServlet {
 			}
 		}
 		else
+		{
+			//remove the space from the term
+			term = term.replaceAll("\\s+", "");
 			items = Searching.singleTermSearch(term, docMap);
+		}
+			
 		
 		for(ResultBean r : items)
 			System.out.println(r.getLocation());
 		
-//		getServletContext().setAttribute("items", items);
 		session.setAttribute("items", items);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
