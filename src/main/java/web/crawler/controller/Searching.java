@@ -29,6 +29,7 @@ import web.crawler.db.dao.DocDao;
 import web.crawler.db.dao.IndexDao;
 import web.crawler.db.dao.WordDocDao;
 import web.crawler.db.model.Doc;
+import web.crawler.db.model.DocBean;
 import web.crawler.db.model.Index;
 import web.crawler.db.model.ResultBean;
 import web.crawler.db.model.WordDoc;
@@ -173,7 +174,7 @@ public class Searching {
 	 * "tfidf found is:"+wd.getTfIdf()); } } } return null; }
 	 */
 
-	public static List<ResultBean> singleTermSearch(String term) {
+	public static List<ResultBean> singleTermSearch(String term, Map<String, Doc> docs) {
 		WordDocDao wddao = new WordDocDao();
 		DocDao dd = new DocDao();
 		Index index = indexDao.getIndexByTerm(term);
@@ -185,10 +186,11 @@ public class Searching {
 			//require tfidf and latest score from dao
 			//get path first
 			
-			Doc dbDocument=dd.getDocByPath(wd.getDocHash());
+//			Doc dbDocument=dd.getDocByPath(wd.getDocHash());
+			Doc doc= docs.get(wd.getDocHash());
 			double tfidf=wd.getTfIdf();
 			
-			List<Double> allRanks=dbDocument.getPageRankings();
+			List<Double> allRanks=doc.getPageRankings();
 			double pageRank=allRanks.get(allRanks.size()-1);
 			double score=(tfidf* Value.TF_IDF_WEIGHT) + (pageRank* Value.LINK_ANALYSIS_WEIGHT);
 			wd.setScore(score);
@@ -283,9 +285,10 @@ public class Searching {
 		List<ResultBean> results = null;
 		if (st.countTokens() > 1) {
 			searchIndexWithQueryParser("mc donalds");
-		} else
-			results = singleTermSearch("b");
-			System.out.println("RESULTS SIZE :"+results.size());
+		}
+//		else
+//			results = singleTermSearch("b");
+//			System.out.println("RESULTS SIZE :"+results.size());
 
 	}
 

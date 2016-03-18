@@ -62,10 +62,10 @@ public class Search extends HttpServlet {
 		
 		List<Index> indexes = indexDao.getIndexBySimilarTerm(term);
 		
-		for(Index i: indexes)
-		{
-		//	System.out.println(i.getTerm());
-		}
+//		for(Index i: indexes)
+//		{
+//		//	System.out.println(i.getTerm());
+//		}
 		//System.out.println(indexes.size() + " URLs found...");
 		
 		

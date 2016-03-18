@@ -2,7 +2,9 @@ package web.crawler.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,7 +16,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.lucene.queryParser.ParseException;
 
 import web.crawler.controller.Searching;
+import web.crawler.db.dao.DocDao;
 import web.crawler.db.dao.IndexDao;
+import web.crawler.db.model.Doc;
 import web.crawler.db.model.ResultBean;
 
 /**
@@ -24,13 +28,29 @@ public class SearchResult extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	IndexDao indexDao = new IndexDao();
+	
+	Map<String, Doc> docMap;
+	
+	public void init(){
+		
+		docMap = new HashMap<String, Doc>();
+		
+		List<Doc> docs = new DocDao().getAllDocs();
+		
+		System.out.println("cearting Map of Docs....");
+		for(Doc d : docs){
+			docMap.put(d.getPath(), d);
+		}
+		System.out.println("DocMap created...");
+		
+		getServletContext().setAttribute("docMap", docMap);
+	}
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public SearchResult() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -46,6 +66,8 @@ public class SearchResult extends HttpServlet {
 
 		List<ResultBean> items = new ArrayList<ResultBean>();
 		
+		docMap = (Map<String, Doc>) getServletContext().getAttribute("docMap");
+		
 		if(splitTerm.length>1)
 		{
 			try {
@@ -57,7 +79,7 @@ public class SearchResult extends HttpServlet {
 			}
 		}
 		else
-			items = Searching.singleTermSearch(term);
+			items = Searching.singleTermSearch(term, docMap);
 		
 		for(ResultBean r : items)
 			System.out.println(r.getLocation());
