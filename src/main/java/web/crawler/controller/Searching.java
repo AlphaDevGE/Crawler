@@ -75,6 +75,7 @@ public class Searching {
 			// documents by some coefficient
 			float score=scoredoc.score;
 			System.out.println("score is: "+score);
+			
 			int document=scoredoc.doc;
 			ResultBean rs = new ResultBean();
 			Document doc = indexSearcher.doc(scoredoc.doc);
