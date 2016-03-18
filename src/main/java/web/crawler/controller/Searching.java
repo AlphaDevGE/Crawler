@@ -85,7 +85,7 @@ public class Searching {
 			
 			rs.setPageRanking(pageR.get(pageR.size()-1));
 			rs.setTdIdf(score);
-			double finalscore=(score* Value.TF_IDF_WEIGHT) + (pageR.get(pageR.size() - 1)* Value.LINK_ANALYSIS_WEIGHT);
+			double finalscore=(score* Value.TF_IDF_WEIGHT_50) + (pageR.get(pageR.size() - 1)* Value.LINK_ANALYSIS_WEIGHT_50);
 			List<Double> pr = docDao.getDocByPath(path).getPageRankings();
 			rs.setPageRanking(pr.get(pr.size() - 1));
 			rs.setScore(finalscore);
@@ -129,7 +129,7 @@ public class Searching {
 			List<Double> pr = docDao.getDocByPath(doc.get("path")).getPageRankings();
 			rs.setTdIdf(score);
 			rs.setPageRanking(pr.get(pr.size() - 1));
-			double finalscore=(score* Value.TF_IDF_WEIGHT) + (pr.get(pr.size() - 1)* Value.LINK_ANALYSIS_WEIGHT);
+			double finalscore=(score* Value.TF_IDF_WEIGHT_50) + (pr.get(pr.size() - 1)* Value.LINK_ANALYSIS_WEIGHT_50);
 			rs.setScore(finalscore);
 			finalresults.add(rs);
 			
@@ -204,7 +204,7 @@ public class Searching {
 			
 			List<Double> allRanks=dbDocument.getPageRankings();
 			double pageRank=allRanks.get(allRanks.size()-1);
-			double score=(tfidf* Value.TF_IDF_WEIGHT) + (pageRank* Value.LINK_ANALYSIS_WEIGHT);
+			double score=(tfidf* Value.TF_IDF_WEIGHT_30) + (pageRank* Value.LINK_ANALYSIS_WEIGHT_70);
 			wd.setScore(score);
 			
 			treemap.put(score, wd.getDocHash());

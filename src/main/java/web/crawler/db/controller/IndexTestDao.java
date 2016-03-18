@@ -37,9 +37,9 @@ public class IndexTestDao {
 		Index i3 = new Index("dogma", new ArrayList<WordDoc>());
 		i3.addWordDoc(wd1);
 		
-		indexDao.saveIndex(i1);
-		indexDao.saveIndex(i2);
-		indexDao.saveIndex(i3);
+//		indexDao.saveIndex(i1);
+//		indexDao.saveIndex(i2);
+//		indexDao.saveIndex(i3);
 		
 		// test data from Db
 		System.out.println("Index found using getUrlBySimilarTerm : " + indexDao.getIndexBySimilarTerm("d").get(0).getTerm());
