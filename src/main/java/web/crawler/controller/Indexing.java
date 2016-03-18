@@ -185,7 +185,7 @@ public class Indexing {
 				wd.setIdf(idf);
 				double tfidfscore = normalizedTf* idf;
 				wd.setTfIdf(tfidfscore);
-				double score= (tfidfscore * Value.TF_IDF_WEIGHT) + (latestScore * Value.LINK_ANALYSIS_WEIGHT);
+				double score= (tfidfscore * Value.TF_IDF_WEIGHT_50) + (latestScore * Value.LINK_ANALYSIS_WEIGHT_50);
 				wd.setScore(score*Value.SCORE_SCALER);
 				System.out.println("Scores:"+score);
 //				tfidf.put("tfidf", tfidfscore);
