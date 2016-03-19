@@ -41,7 +41,7 @@ public class LinkAnalysis {
 					if(str.equals(d1.getUrl()))
 					{
 						incomings.add(d2.getUrl());
-						incomingAddresses.add(new Address(d2.getUrl(), d2.getPath(), d2.getOutgoingDocsStr().size()));
+						incomingAddresses.add(new Address(d2.getUrl(), d2.getPath()));
 					}
 				}
 				//check for the outgoing URl if exist in DB then create the outgoingAddress out of it
@@ -49,7 +49,7 @@ public class LinkAnalysis {
 				{
 					if(outgoingStr.equals(d2.getUrl()))
 					{
-						outgoingAddresses.add(new Address(d2.getUrl(), d2.getPath(), d2.getOutgoingDocsStr().size()));
+						outgoingAddresses.add(new Address(d2.getUrl(), d2.getPath()));
 					}
 				}
 			}

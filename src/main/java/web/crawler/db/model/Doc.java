@@ -43,7 +43,7 @@ public class Doc {
 	private Set<String> outgoingDocsStr;
 	private Set<String> incomingDocsStr;
 	private Set<Address> outgoingAddresses;
-	private Set<Address> incomingAddresses;
+//	private Set<Address> incomingAddresses;
 	private String parentStr;
 	private List<Double> pageRankings;
 	private int rankingIterationTime;
@@ -64,7 +64,7 @@ public class Doc {
 		this.outgoingDocsStr = outgoingDocsStr;
 		this.incomingDocsStr =  new HashSet<String>();
 		this.outgoingAddresses =  new HashSet<Address>();
-		this.incomingAddresses =  new HashSet<Address>();
+//		this.incomingAddresses =  new HashSet<Address>();
 		this.parentStr = parentStr;
 		this.rankingIterationTime = 0;
 	}
@@ -165,13 +165,13 @@ public class Doc {
 		this.outgoingAddresses = outgoingAddresses;
 	}
 
-	public Set<Address> getIncomingAddresses() {
-		return incomingAddresses;
-	}
-
-	public void setIncomingAddresses(Set<Address> incomingAddresses) {
-		this.incomingAddresses = incomingAddresses;
-	}
+//	public Set<Address> getIncomingAddresses() {
+//		return incomingAddresses;
+//	}
+//
+//	public void setIncomingAddresses(Set<Address> incomingAddresses) {
+//		this.incomingAddresses = incomingAddresses;
+//	}
 
 	public String getParentStr() {
 		return parentStr;

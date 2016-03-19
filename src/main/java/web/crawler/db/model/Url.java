@@ -9,7 +9,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import web.crawler.constant.DBTable;
-
+/**
+ * 
+ * @author AlphaDev
+ * 
+ * Url model class has been replaced by Doc.
+ *
+ */
 @Document(collection = DBTable.URL)
 public class Url {
 		

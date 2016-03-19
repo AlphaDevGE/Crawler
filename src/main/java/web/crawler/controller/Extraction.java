@@ -25,10 +25,8 @@ import org.jsoup.select.Elements;
 import org.xml.sax.SAXException;
 
 import web.crawler.db.dao.DocDao;
-import web.crawler.db.dao.DocsDao;
 import web.crawler.db.dao.UrlDao;
 import web.crawler.db.model.Doc;
-import web.crawler.db.model.Docs;
 import web.crawler.db.model.Url;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;

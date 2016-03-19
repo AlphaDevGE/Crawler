@@ -28,15 +28,13 @@ public class Address {
 	
 	private String url;
 	private String path;
-	private int noOfOutgoingLinks;
 	
 	public Address(){super();}
 	
-	public Address(String url, String path, int noOfOutgoingLinks) {
+	public Address(String url, String path) {
 		super();
 		this.url = url;
 		this.path = path;
-		this.noOfOutgoingLinks = noOfOutgoingLinks;
 	}
 
 	public String getId() {
@@ -63,23 +61,14 @@ public class Address {
 		this.path = path;
 	}
 
-	public int getNoOfOutgoingLinks() {
-		return noOfOutgoingLinks;
-	}
-
-	public void setNoOfOutgoingLinks(int noOfOutgoingLinks) {
-		this.noOfOutgoingLinks = noOfOutgoingLinks;
-	}
-
 	public String toString() {
 		String str = String.format(
                 "'address':{\n"
               + "		'id': %s,\n"
               + "		'url': '%s',\n"
               + "		'path': '%s',\n"
-              + "		'noOfOutgoingLinks': '%s',\n"
               + "		},\n",
-                id, url,path , noOfOutgoingLinks
+                id, url,path
                 );
 		return str;
 	}

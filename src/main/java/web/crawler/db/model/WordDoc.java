@@ -18,40 +18,15 @@ import web.crawler.constant.DBTable;
  */
 @Document(collection = DBTable.WORD_DOC)
 public class WordDoc {
-			
-//	@Indexed
-//	private String ic;
-	
-/*	doc_hash: 
-	page_ranking: 
-	TF:
-	IDF:
-	TF-IDF:
-	apearanceTime: 
-	positions: [3, 20, 100, ...]
-	ranks: [ contecnt: No, 
-			 title: No, 
-			 meta: No],
-	
 
-	meta_data: [ no_of_appearance: No,
-				 .... ],
-
-	//maybe we can have no of appearance based on content, meta, header, title
-	no_of_appearance: [ content: no, header: no, title: no, meta: no],
-	appearance_positions[ content: [1, 10, 20, ...],  
-						  header: [11, 110, 120, ...], 
-						  title: [21, 210, 220, ...], 
-						  meta: [31, 310, 320, ...] 
-						],
-
-	score: //calculating ranks, TF, IDF, TF-IDF and may be more
-*/	
 	@Id
 	private String id;
 		
 	@Indexed
 	private String docHash;
+	
+	//this is document number that is been provided by Apache Lucene library.
+	private int docNumber;
 	
 	private String term;
 	private double tf;
@@ -66,7 +41,7 @@ public class WordDoc {
 	public WordDoc(){ super(); }
 	
 	public WordDoc(String docHash, String term, double tf, double idf, double tfIdf, List<Integer> postitions,
-			double score, Doc doc,boolean inTitle) {
+			double score, Doc doc, boolean inTitle) {
 		super();
 		this.docHash = docHash;
 		this.term = term.toLowerCase();
@@ -166,6 +141,14 @@ public class WordDoc {
 		this.docLocation = docLocation;
 	}
 
+	public int getDocNumber() {
+		return docNumber;
+	}
+
+	public void setDocNumber(int docNumber) {
+		this.docNumber = docNumber;
+	}
+
 	public String toString() {
 		String str = String.format(
                 "'WordDoc':{\n"
@@ -183,5 +166,4 @@ public class WordDoc {
                 );
 		return str;
 	}
-	
 }

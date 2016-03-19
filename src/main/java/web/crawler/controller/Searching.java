@@ -29,7 +29,6 @@ import web.crawler.db.dao.DocDao;
 import web.crawler.db.dao.IndexDao;
 import web.crawler.db.dao.WordDocDao;
 import web.crawler.db.model.Doc;
-import web.crawler.db.model.DocBean;
 import web.crawler.db.model.Index;
 import web.crawler.db.model.ResultBean;
 import web.crawler.db.model.WordDoc;
@@ -86,7 +85,7 @@ public class Searching {
 			List<Double> pageR=docDao.getDocByPath(path).getPageRankings();
 			
 			rs.setPageRanking(pageR.get(pageR.size()-1));
-			rs.setTdIdf(score);
+			rs.setTfIdf(score);
 			double finalscore=(score* Value.TF_IDF_WEIGHT_50) + (pageR.get(pageR.size() - 1)* Value.LINK_ANALYSIS_WEIGHT_50);
 			List<Double> pr = docDao.getDocByPath(path).getPageRankings();
 			rs.setPageRanking(pr.get(pr.size() - 1));
@@ -129,7 +128,7 @@ public class Searching {
 			rs.setDescription(doc.get("title"));
 			rs.setLocation(doc.get("path"));
 			List<Double> pr = docDao.getDocByPath(doc.get("path")).getPageRankings();
-			rs.setTdIdf(score);
+			rs.setTfIdf(score);
 			rs.setPageRanking(pr.get(pr.size() - 1));
 			double finalscore=(score* Value.TF_IDF_WEIGHT_50) + (pr.get(pr.size() - 1)* Value.LINK_ANALYSIS_WEIGHT_50);
 			rs.setScore(finalscore);
@@ -223,7 +222,7 @@ public class Searching {
 			
 			for (WordDoc wd : wordDocList) {
 				if (wd.getDocHash().equals(value)) {
-					rs.setTdIdf(wd.getTfIdf());
+					rs.setTfIdf(wd.getTfIdf());
 
 				}
 			}
@@ -239,10 +238,6 @@ public class Searching {
 			results.add(rs);
 
 		}
-		
-
-		
-		
 
 		return results;
 	}

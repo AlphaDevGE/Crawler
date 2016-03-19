@@ -3,7 +3,7 @@ package web.crawler.db.model;
 public class ResultBean {
 	private String description;
 	private String location;
-	private double tdIdf;
+	private double tfIdf;
 	private double pageRanking;
 	private double score;
 	
@@ -13,7 +13,7 @@ public class ResultBean {
 		super();
 		this.description = description;
 		this.location = location;
-		this.tdIdf = tdIdf;
+		this.tfIdf = tdIdf;
 		this.pageRanking = pageRanking;
 		this.score = score;
 	}
@@ -34,12 +34,12 @@ public class ResultBean {
 		this.location = location;
 	}
 
-	public double getTdIdf() {
-		return tdIdf;
+	public double getTfIdf() {
+		return tfIdf;
 	}
 
-	public void setTdIdf(double tdIdf) {
-		this.tdIdf = tdIdf;
+	public void setTfIdf(double tdIdf) {
+		this.tfIdf = tdIdf;
 	}
 
 	public double getPageRanking() {
