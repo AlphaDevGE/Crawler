@@ -29,6 +29,13 @@ public class DocDao {
 		return docs;
 	}
 	
+	public Doc getDocById(String id){
+		Query findQuery = new Query();
+		findQuery.addCriteria(Criteria.where("id").is(id));
+		Doc dbDoc = mongoOperation.findOne(findQuery, Doc.class, DBTable.DOC);
+		
+		return dbDoc;
+	}	
 	
 	public Doc getDocByUrl(String url){
 		Query findQuery = new Query();
@@ -82,14 +89,5 @@ public class DocDao {
 	public void saveDocsList(List<Doc> docs){
 		mongoOperation.insertAll(docs);
 	}
-	
-	public void updateIncommingLink(String url, Set<String> incomingSet)
-	{
-		Query findQuery = new Query();
-		findQuery.addCriteria(Criteria.where("url").is( url ));
-		Doc dbDoc = mongoOperation.findOne(findQuery, Doc.class, DBTable.DOC);
-		mongoOperation.updateFirst(findQuery, Update.update("incomingDocsStr", incomingSet), DBTable.DOC);		
-	}
-
-	
+		
 }

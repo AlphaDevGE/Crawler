@@ -8,5 +8,5 @@ public class DBTable {
 	public static final String DOC = "doc";
 	public static final String DOCS = "docs";
 	public static final String ADDRESS = "address";
-	 
+	public static final String USER = "users";
 }

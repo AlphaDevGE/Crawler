@@ -9,11 +9,11 @@ public class ResultBean {
 	
 	public ResultBean(){super();}
 	
-	public ResultBean(String description, String location, double tdIdf, double pageRanking, double score) {
+	public ResultBean(String description, String location, double tfIdf, double pageRanking, double score) {
 		super();
 		this.description = description;
 		this.location = location;
-		this.tfIdf = tdIdf;
+		this.tfIdf = tfIdf;
 		this.pageRanking = pageRanking;
 		this.score = score;
 	}
@@ -38,8 +38,8 @@ public class ResultBean {
 		return tfIdf;
 	}
 
-	public void setTfIdf(double tdIdf) {
-		this.tfIdf = tdIdf;
+	public void setTfIdf(double tfIdf) {
+		this.tfIdf = tfIdf;
 	}
 
 	public double getPageRanking() {

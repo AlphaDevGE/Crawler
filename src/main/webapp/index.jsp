@@ -62,7 +62,7 @@
 			<c:forEach items="${items}" var="i">
 				<tr>
 					<td> ${i.description }</td>
-					<td>Overall: ${i.score } <br/> TF-IDF: ${i.tdIdf } <br/> PageRanking: ${i.pageRanking }</td>
+					<td>Overall: ${i.score } <br/> TF-IDF: ${i.tfIdf } <br/> PageRanking: ${i.pageRanking }</td>
 					<td>${i.location }</td>
 				</tr>
 			</c:forEach>

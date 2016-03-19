@@ -211,7 +211,6 @@ public class Doc {
               + "		'rankingIterationTimae': '%s',\n"
               + "		'title': '%s',\n"
               + "		'parent': '%s',\n"
-              + "		'outgoingUrls': '%s',\n"
               + "		'header': '%s',\n"
               + "		'metadata': '%s',\n"
               + "		},\n",
