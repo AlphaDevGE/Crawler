@@ -20,6 +20,7 @@ import org.json.JSONArray;
 
 import web.crawler.db.dao.IndexDao;
 import web.crawler.db.dao.UserDao;
+import web.crawler.db.model.Doc;
 import web.crawler.db.model.Index;
 import web.crawler.db.model.User;
 
@@ -28,6 +29,8 @@ public class Search extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private IndexDao indexDao = new IndexDao();
+	private String termsSearched = "termsSearched";
+	private Map<String, Integer> sessionTermsSearched;
 
 	public Search() {
 		super();
@@ -47,7 +50,15 @@ public class Search extends HttpServlet {
 
 		int numberOfTermResult = 7;
 		// System.out.println("Search Servlet: POST");
+		
+		String firstSuggesion = "";
+		
+		//get the user's previous searched terms from session 
+		HttpSession session = request.getSession();
+		Map<String, Integer> sessionTermsSearched = (Map<String, Integer>) session.getAttribute( termsSearched );
+		
 
+		
 		String term = request.getParameter("term");
 		String[] splitTerm = term.split(" ");
 		// System.out.println("splitterm size: " + splitTerm.length);
@@ -71,6 +82,13 @@ public class Search extends HttpServlet {
 			if (count >= numberOfTermResult)
 				break;
 		}
+		
+		for(String t: sessionTermsSearched.keySet())
+			if(t.toLowerCase().contains(term.toLowerCase()))
+			{
+				firstSuggesion = t;
+			}
+		strList.add(0, firstSuggesion);
 		String searchList = new JSONArray(strList).toString();
 		// System.out.println(searchList);
 		response.getWriter().write(searchList);
