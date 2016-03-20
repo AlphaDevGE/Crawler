@@ -78,7 +78,7 @@ public class SearchResult extends HttpServlet {
 		User user = null;
 		Cookie cookie = new Cookie("null","null");
 		String ipAddress = "testing IP Add";
-		String geoLocation ="0000";
+		String geoLocation =request.getParameter("geoLocation");
 		String zipCode = request.getParameter("zipCode");
 		Cookie[] cookies = request.getCookies();
 		Map<String, Integer> sessionTermsSearched = (Map<String, Integer>) session.getAttribute( termsSearched );
@@ -115,7 +115,7 @@ public class SearchResult extends HttpServlet {
 		{
 			//create user and save it in cookie
 			System.out.println("Creating New User...");
-			user = new User();
+			user = new User(geoLocation, zipCode, ipAddress, new Date(), new HashMap<String, Integer>());
 			userDao.saveUser(user);
 			System.out.println("User ID: " + user.getId());
 		}

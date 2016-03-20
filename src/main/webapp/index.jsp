@@ -41,6 +41,7 @@
 					<div class="col-lg-10">
 						<input type="text" id="search" name="search" class="form-control" />
 						<input type="hidden" id ="zipcode" name="zipCode" value="">
+						<input type="hidden" id ="latlong" name="geoLocation" value="">
 						<input type="submit" id="submit" name="submit" value="Search" class="col-lg-4" />
 					
 						
@@ -96,6 +97,8 @@ function geoFindMe() {
 			success : function(response) {
 				console.log("Response :"+response.postalCodes[1].postalCode);
 				$('#zipcode').attr('value',response.postalCodes[1].postalCode); 
+				var str="lat :"+latitude+" lon:"+longitude;
+				$('#latlong').attr('value',str);
 
 			}
 
