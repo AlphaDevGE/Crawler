@@ -230,7 +230,7 @@ public class Searching {
 			List<Double> pr = doc.getPageRankings();
 			rs.setDescription(doc.getTitle());
 			rs.setScore(key);
-			rs.setLocation(value);
+			rs.setLocation(doc.getUrl());
 			rs.setPageRanking(pr.get(pr.size() - 1));
 			
 			resultsOfPath.add(value);

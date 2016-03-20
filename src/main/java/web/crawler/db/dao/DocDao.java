@@ -47,7 +47,7 @@ public class DocDao {
 	
 	public Doc getDocByPath(String path){
 		Query findQuery = new Query();
-		findQuery.addCriteria(Criteria.where("path").is(path));
+		findQuery.addCriteria(Criteria.where("location").is(path));
 		Doc dbDoc = mongoOperation.findOne(findQuery, Doc.class, DBTable.DOC);
 		
 		return dbDoc;

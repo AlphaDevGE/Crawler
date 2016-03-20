@@ -63,7 +63,7 @@
 				<tr>
 					<td> ${i.description }</td>
 					<td>Overall: ${i.score } <br/> TF-IDF: ${i.tfIdf } <br/> PageRanking: ${i.pageRanking }</td>
-					<td>${i.location }</td>
+					<td><a href="${i.location}">${i.location }</a></td>
 				</tr>
 			</c:forEach>
 
@@ -84,7 +84,18 @@ function geoFindMe() {
 	
 	function showPosition(position) {
 	    console.log("Latitude: " + position.coords.latitude+" Longitude: "+ position.coords.longitude);
-	  
+	  	//make ajax request to url http://api.geonames.org/findNearbyPostalCodesJSON?lat=34.0677337%20&lng=-118.1668624&username=demo
+	  			var latitude=position.coords.latitude;
+	    		var longitude=position.coords.longitude;
+	  			var url="http://api.geonames.org/findNearbyPostalCodesJSON?lat="+latitude+"&lng="+longitude+"&username=demo";
+	  	$.ajax(url, {
+			type : 'POST',
+			success : function(response) {
+				console.log("Response :"+response.postalCodes[1].postalCode);
+
+			}
+
+		})
 	}
 }
 

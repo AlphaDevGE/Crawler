@@ -45,7 +45,7 @@ public class SearchResult extends HttpServlet {
 		
 		System.out.println("cearting Map of Docs....");
 		for(Doc d : docs){
-			docMap.put(d.getPath(), d);
+			docMap.put(d.getLocation(), d);
 		}
 		System.out.println("DocMap created...");
 		
