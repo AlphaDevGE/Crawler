@@ -78,14 +78,13 @@ public class SearchResult extends HttpServlet {
 		User user = null;
 		Cookie cookie = new Cookie("null","null");
 		String ipAddress = "testing IP Add";
-		String geoLocation;
-		String zipCode;
+		String geoLocation = "0000";
+		String zipCode = request.getParameter("zipCode");
 		Cookie[] cookies = request.getCookies();
 		Map<String, Integer> sessionTermsSearched = (Map<String, Integer>) session.getAttribute( termsSearched );
 
 		//get the GEO location and zipCode h
-		geoLocation= "0000";
-		zipCode = "0000";
+		System.out.println("zipCode"+zipCode);
 		
 		
 		

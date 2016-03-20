@@ -14,6 +14,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 public class Controller {
 	
 	static boolean shouldExtract=false;
+	static String specificDomain="ocean.pcwerk.com";
 
 	public static void main(String[] args) throws Exception {
 		

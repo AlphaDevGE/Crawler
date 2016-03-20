@@ -48,6 +48,14 @@ public class MultithreadedCrawler extends WebCrawler {
 	public boolean shouldVisit(Page referringPage, WebURL url) {
 		
 		if (docDao.getDocByUrl(url.getURL()) == null) {
+			if(Controller.specificDomain!=null&&Controller.specificDomain.length()>0){
+				if(url.getURL().contains(Controller.specificDomain)){
+					return true;
+				}else{
+					return false;
+				}
+			
+			}
 			return true;
 		} else {
 			System.out.println("Doc " + url.getURL()

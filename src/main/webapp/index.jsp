@@ -19,7 +19,7 @@
 
 
 </head>
-<body onload="geoFindMe()">
+<body onload="geoFindMe()" >
 	<br />
 	<br />
 	<!-- 	<div class="search-container">
@@ -40,6 +40,8 @@
 					<div class="col-lg-10">
 						<input type="text" id="search" name="search" class="form-control" />
 						<input type="submit" id="submit" name="submit" value="Search" class="col-lg-4" />
+					
+						<input type="hidden" id ="zipcode" name="zipCode" value="">
 						
 					</div>
 				</div>
@@ -91,6 +93,7 @@ function geoFindMe() {
 			type : 'POST',
 			success : function(response) {
 				console.log("Response :"+response.postalCodes[1].postalCode);
+				$('#zipcode').attr('value',response.postalCodes[1].postalCode); 
 
 			}
 
