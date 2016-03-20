@@ -57,6 +57,11 @@ public class Search extends HttpServlet {
 		HttpSession session = request.getSession();
 		Map<String, Integer> sessionTermsSearched = (Map<String, Integer>) session.getAttribute( termsSearched );
 		
+		if(sessionTermsSearched==null)
+			System.out.println("sessionTermsSearched not found in Session");
+		else
+			System.out.println("sessionTermsSearched = "+sessionTermsSearched.size());
+		
 
 		
 		String term = request.getParameter("term");
@@ -83,12 +88,15 @@ public class Search extends HttpServlet {
 				break;
 		}
 		
+
 		for(String t: sessionTermsSearched.keySet())
 			if(t.toLowerCase().contains(term.toLowerCase()))
 			{
 				firstSuggesion = t;
 			}
-		strList.add(0, firstSuggesion);
+		if(firstSuggesion.length()>0)
+			strList.add(0, firstSuggesion);
+		
 		String searchList = new JSONArray(strList).toString();
 		// System.out.println(searchList);
 		response.getWriter().write(searchList);
