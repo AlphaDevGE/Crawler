@@ -89,5 +89,6 @@ public class DocDao {
 	public void saveDocsList(List<Doc> docs){
 		mongoOperation.insertAll(docs);
 	}
+
 		
 }

@@ -1,18 +1,15 @@
 package web.crawler.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import web.crawler.constant.Value;
 import web.crawler.db.dao.DocDao;
 import web.crawler.db.model.Address;
 import web.crawler.db.model.Doc;
 
-public class PageRanking {
+public class PageRankingOld {
 
 	public static void main(String[] args) {
 
@@ -34,29 +31,19 @@ public class PageRanking {
 		List<Double> ranks = new ArrayList<Double>();
 		ranks.add(initialRank);
 		//make all the pages rank 1/n at initial stage
-//		for(Doc doc: docs)
-//		{
-//			doc.setPageRankings(ranks);
-//			docDao.saveDoc(doc);
-//		}
-		
-		Map<String, Doc> docMap = new HashMap<String, Doc>();
 		for(Doc doc: docs)
 		{
 			doc.setPageRankings(ranks);
-			docMap.put(doc.getUrl(), doc);
-		}		
-		System.out.println("docMap size: " + docMap.size());
-
+			docDao.saveDoc(doc);
+		}
+		
+		docs = docDao.getAllDocs();
+		
 		//do next 10 iteration and save ranking of each page
 		//stop saving at iteration if the value is equal to previous iteration
-		
-		Set<String> urlKeys = docMap.keySet();
 		for(int i=1 ; i<=6; i++)
 		{
-//			Map<String, Doc> docMapTemp = new HashMap<String, Doc>();
-			
-			for(String url: urlKeys)
+			for(Doc doc: docs)
 			{
 				//If already redundant ranking value found in more than 1 iteration
 //				if(doc.getRankingIterationTimae() > doc.getPageRankings().size()) 
@@ -64,7 +51,6 @@ public class PageRanking {
 //					System.out.println("Already repeated ranking found for Doc: " + doc.getUrl());
 //					continue;
 //				}
-				Doc doc = docMap.get(url);
 					
 				double lastRank = doc.getPageRankings().get( doc.getPageRankings().size()-1 );
 				double sum = 0;
@@ -72,14 +58,14 @@ public class PageRanking {
 				{
 					if(doc.getIncomingDocsStr().size() != 0)
 					{
-//						System.out.println("No incoming for Doc: " + doc.getUrl() + " found.");
+						System.out.println("No incoming for Doc: " + doc.getUrl() + " found.");
 						for(String incomingUrl: doc.getIncomingDocsStr())
 						{
-							Doc incomingDoc = docMap.get(incomingUrl);
+							Doc incomingDoc = docDao.getDocByUrl(incomingUrl);
 							sum = sum + incomingDoc.getPageRankings()
 								.get( incomingDoc.getPageRankings().size()-1 )
 								/ incomingDoc.getOutgoingDocsStr().size();
-//							System.out.println("Sum for Doc: " + doc.getUrl() + " = " + sum);
+							System.out.println("Sum for Doc: " + doc.getUrl() + " = " + sum);
 						}
 					}
 				}
@@ -92,31 +78,24 @@ public class PageRanking {
 					System.out.println("Iteration: " + i + " page ranking "+ newRank +" for Doc: " + doc.getUrl() + "added." );
 					doc.getPageRankings().add(newRank);
 				}
-//				else
-//					System.out.println("Iteration: " + i + " Doc: " + doc.getUrl() +  " old and New Page ranking are same:  "+ lastRank +" = " + newRank);
+				else
+					System.out.println("Iteration: " + i + " Doc: " + doc.getUrl() +  " old and New Page ranking are same:  "+ lastRank +" = " + newRank);
 				
 				doc.setRankingIterationTimae(i);
-				docMap.put(url, doc);
-//				docDao.saveDoc(doc);
+				docDao.saveDoc(doc);
 			}
 		}	
 		
-		int i = 1;
-//		for(String url: docMap.keySet())
-//			if(docMap.get(url).getPageRankings().size()>1)
-//				System.out.println(i++ + ": url: " + url + "Pagerank: " + 
-//						docMap.get(url).getPageRankings().get(docMap.get(url).getPageRankings().size()-1));
-//		
-//		//display some sample page ranking
-//		docs = docDao.getAllDocs();
-//		System.out.println(" ****************** Sample Page Ranking *********************** ");
-//		for(Doc doc : docs)
-//		{
-//			if(doc.getIncomingDocsStr() == null)
-//				System.out.println("INCOMING LINK IS NULL !!!");
-//			else if(doc.getIncomingDocsStr().size() > 0)
-//				System.out.println("Doc: " +doc.getUrl()+ " Rankins: " + doc.getPageRankings());
-//		}
+		//display some sample page ranking
+		docs = docDao.getAllDocs();
+		System.out.println(" ****************** Sample Page Ranking *********************** ");
+		for(Doc doc : docs)
+		{
+			if(doc.getIncomingDocsStr() == null)
+				System.out.println("INCOMING LINK IS NULL !!!");
+			else if(doc.getIncomingDocsStr().size() > 0)
+				System.out.println("Doc: " +doc.getUrl()+ " Rankins: " + doc.getPageRankings());
+		}
 		
 	}
 }
