@@ -91,14 +91,15 @@ function geoFindMe() {
 	  	//make ajax request to url http://api.geonames.org/findNearbyPostalCodesJSON?lat=34.0677337%20&lng=-118.1668624&username=demo
 	  			var latitude=position.coords.latitude;
 	    		var longitude=position.coords.longitude;
+	    		var str="lat :"+latitude+" lon:"+longitude;
+				$('#latlong').attr('value',str);
 	  			var url="http://api.geonames.org/findNearbyPostalCodesJSON?lat="+latitude+"&lng="+longitude+"&username=demo";
 	  	$.ajax(url, {
 			type : 'POST',
 			success : function(response) {
 				console.log("Response :"+response.postalCodes[1].postalCode);
 				$('#zipcode').attr('value',response.postalCodes[1].postalCode); 
-				var str="lat :"+latitude+" lon:"+longitude;
-				$('#latlong').attr('value',str);
+				
 
 			}
 

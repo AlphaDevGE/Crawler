@@ -20,7 +20,7 @@ public class Indexing2 {
 		Analyzer an = new StandardAnalyzer(version);
 		Directory index = FSDirectory.open(new File(Paths.PATH_TO_STORE_INDEXING));
 		IndexWriterConfig config = new IndexWriterConfig(version, an);
-		boolean createNewIndex = false;
+		boolean createNewIndex = true;
 		if (createNewIndex) {
 
 			config.setOpenMode(OpenMode.CREATE);
