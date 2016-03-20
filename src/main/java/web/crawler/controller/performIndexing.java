@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharReader;
 import org.apache.lucene.analysis.TokenStream;
@@ -22,6 +23,8 @@ import org.apache.lucene.index.TermFreqVector;
 import org.apache.lucene.search.DefaultSimilarity;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+
+import web.crawler.constant.Paths;
 import web.crawler.db.dao.DocDao;
 import web.crawler.db.dao.IndexDao;
 import web.crawler.db.model.Index;
@@ -60,9 +63,14 @@ public class performIndexing {
 				doc.add(new Field("html", ts, Field.TermVector.WITH_POSITIONS));
 				doc.add(new Field("path", f.getAbsolutePath(), Field.Store.YES,
 						Field.Index.NO));
+				
+				try{
 				doc.add(new Field("title", docDao.getDocByPath(
 						f.getAbsolutePath()).getTitle(), Field.Store.YES,
 						Field.Index.ANALYZED));
+				}catch(Exception e){
+					System.out.println("This file has no title in the database");
+				}
 				writer.addDocument(doc);
 
 			}
@@ -82,7 +90,7 @@ public class performIndexing {
 		DefaultSimilarity simi = new DefaultSimilarity();
 		
 		
-		File indexDirectory = new File("D:/webcrawler/Indexing");
+		File indexDirectory = new File(Paths.PATH_TO_STORE_INDEXING);
 		IndexReader reader = IndexReader.open(FSDirectory.open(indexDirectory));
 		System.out.println("Total Number of documents in the index:"
 				+ reader.numDocs());
@@ -122,11 +130,16 @@ public class performIndexing {
 				Document docObject = reader.document(documentNumber);
 				String documentPath = docObject.get("path");
 				System.out.println(documentPath + " " + tfidf + " ");
-				wd.setDocHash(documentPath);
 				wd.setTerm(enumeration.term().text());
-				wd.setIdf(idf);
 				wd.setTf(noramlizedTf);
+				wd.setIdf(idf);
 				wd.setTfIdf(tfidf);
+				wd.setDocHash(documentPath);
+				
+				
+				wd.setDocNumber(documentNumber);
+				
+				
 				wordDocList.add(wd);
 				
 			}

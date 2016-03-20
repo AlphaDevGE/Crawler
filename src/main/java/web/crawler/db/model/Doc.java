@@ -1,5 +1,5 @@
 package web.crawler.db.model;
-
+//path
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -45,6 +45,7 @@ public class Doc {
 	private Set<Address> outgoingAddresses;
 //	private Set<Address> incomingAddresses;
 	private String parentStr;
+	private String typeOfFile;
 	private List<Double> pageRankings;
 	private int rankingIterationTime;
 	
@@ -194,6 +195,22 @@ public class Doc {
 	}
 
 	public void setRankingIterationTimae(int rankingIterationTime) {
+		this.rankingIterationTime = rankingIterationTime;
+	}
+	
+	public String getTypeOfFile() {
+		return typeOfFile;
+	}
+
+	public void setTypeOfFile(String typeOfFile) {
+		this.typeOfFile = typeOfFile;
+	}
+
+	public int getRankingIterationTime() {
+		return rankingIterationTime;
+	}
+
+	public void setRankingIterationTime(int rankingIterationTime) {
 		this.rankingIterationTime = rankingIterationTime;
 	}
 
