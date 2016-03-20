@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+
 <title>Autocomplete in java web application using Jquery and
 	JSON</title>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -20,7 +20,7 @@
 
 
 </head>
-<body>
+<body onload="geoFindMe()">
 	<br />
 	<br />
 	<!-- 	<div class="search-container">
@@ -72,4 +72,21 @@
 		</div>
 	</div>
 </body>
+<script>
+function geoFindMe() {
+	
+	    if (navigator.geolocation) {
+	        navigator.geolocation.getCurrentPosition(showPosition);
+	        showPosition();
+	    } else {
+	        x.innerHTML = "Geolocation is not supported by this browser.";
+	    }
+	
+	function showPosition(position) {
+	    console.log("Latitude: " + position.coords.latitude+" Longitude: "+ position.coords.longitude);
+	  
+	}
+}
+
+</script>
 </html>

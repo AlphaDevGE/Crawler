@@ -146,7 +146,7 @@ public class performIndexing {
 			index.setTerm(term);
 			index.setDocuments(wordDocList);
 			indxList.add(index);
-			if(indxList.size()==500){
+			if(indxList.size()==1000){
 				indexDao.saveIndex(indxList);
 				indxList.clear();
 			}
