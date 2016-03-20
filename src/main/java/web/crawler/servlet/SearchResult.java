@@ -78,7 +78,7 @@ public class SearchResult extends HttpServlet {
 		User user = null;
 		Cookie cookie = new Cookie("null","null");
 		String ipAddress = "testing IP Add";
-		String geoLocation = "0000";
+		String geoLocation ="0000";
 		String zipCode = request.getParameter("zipCode");
 		Cookie[] cookies = request.getCookies();
 		Map<String, Integer> sessionTermsSearched = (Map<String, Integer>) session.getAttribute( termsSearched );

@@ -4,7 +4,8 @@
 <html>
 <head>
 
-<title>Search</title>
+<title>Autocomplete in java web application using Jquery and
+	JSON</title>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src="autocompleter.js"></script>
@@ -39,9 +40,10 @@
 					<label class="col-lg-1 control-label">Search: </label>
 					<div class="col-lg-10">
 						<input type="text" id="search" name="search" class="form-control" />
+						<input type="hidden" id ="zipcode" name="zipCode" value="">
 						<input type="submit" id="submit" name="submit" value="Search" class="col-lg-4" />
 					
-						<input type="hidden" id ="zipcode" name="zipCode" value="">
+						
 						
 					</div>
 				</div>
