@@ -18,6 +18,7 @@ public class CheckPageRanking {
 		Doc docWithMaxOutgoing = docs.get(0);
 		Doc docWithMaxRanks = docs.get(0);
 		Doc docWithMinRanks = docs.get(0);
+		Doc docWithMaxRanking = docs.get(0);
 		for(Doc doc : docs)
 		{
 			if(doc.getIncomingDocsStr() == null)
@@ -32,9 +33,14 @@ public class CheckPageRanking {
 			
 			if( docWithMaxRanks.getPageRankings().size() < doc.getPageRankings().size() )
 				docWithMaxRanks = doc;
+			
 			if(doc.getPageRankings().get(doc.getPageRankings().size()-1) < 
 					docWithMinRanks.getPageRankings().get(docWithMinRanks.getPageRankings().size()-1) )
 				docWithMinRanks = doc;
+			
+			if(doc.getPageRankings().get(doc.getPageRankings().size()-1) > 
+					docWithMaxRanking.getPageRankings().get(docWithMaxRanking.getPageRankings().size()-1) )
+				docWithMaxRanking = doc;
 		}
 		
 		System.out.println("Total Docs: "+docs.size() + " | Toatal # Docs with outgoings: " + count);
@@ -50,8 +56,12 @@ public class CheckPageRanking {
 		for(double d : docWithMaxRanks.getPageRankings())
 			System.out.println(d);
 		
-		System.out.println("Doc with Miniuimum number page ranks : url = " + docWithMinRanks.getUrl() );
+		System.out.println("Doc with Miniuimum page ranks : url = " + docWithMinRanks.getUrl() );
 		for(double d : docWithMinRanks.getPageRankings())
+			System.out.println(d); 
+		
+		System.out.println("Doc with MAX page ranks : url = " + docWithMaxRanking.getUrl() );
+		for(double d : docWithMaxRanking.getPageRankings())
 			System.out.println(d); 
 
 	}

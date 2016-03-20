@@ -59,7 +59,7 @@ public class PageRanking {
 		
 			
 			
-			for (int i = 1; i <= 5; i++) {
+			for (int i = 1; i <= 3; i++) {
 			// Map<String, Doc> docMapTemp = new HashMap<String, Doc>();
 				for (String url : urlKeys) {
 			
