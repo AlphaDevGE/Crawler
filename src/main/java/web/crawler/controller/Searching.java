@@ -196,6 +196,12 @@ public class Searching {
 		List<ResultBean> results = new ArrayList<ResultBean>();
 		TreeMap<Double, String> treemap = new TreeMap<Double, String>();
 		
+		System.out.println("In singleTermSearch() | term: " + term);
+		if(wordDocList==null)
+			System.out.println("wordDocList is null");
+		else
+			System.out.println("wordDocList Size: " + wordDocList.size());
+		
 		for (WordDoc wd : wordDocList) {
 			//require tfidf and latest score from dao
 			//get path first
@@ -203,8 +209,14 @@ public class Searching {
 //			Doc dbDocument=dd.getDocByPath(wd.getDocHash());
 			Doc doc= docs.get(wd.getDocHash());
 			double tfidf=wd.getTfIdf();
-			
-			List<Double> allRanks=doc.getPageRankings();
+			List<Double> allRanks=null;
+			if(doc != null)
+				allRanks=doc.getPageRankings();
+			else 
+			{
+				System.out.println("Searching: found NULL Doc !!!!!!!!!!!!");
+				continue;
+			}
 			double pageRank=allRanks.get(allRanks.size()-1);
 			double score=(tfidf* Value.TF_IDF_WEIGHT_30) + (pageRank* Value.LINK_ANALYSIS_WEIGHT_70);
 			wd.setScore(score);
